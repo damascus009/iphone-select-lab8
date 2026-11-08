@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="preload" as="image" href="assets/images/hero_bg.webp" fetchpriority="high">
     <link rel="stylesheet" href="tailwind.css">
-    <link rel="stylesheet" href="custom-styles.css?v=22">
+    <link rel="stylesheet" href="custom-styles.css?v=lab8">
   </head>
   <body id="top" class="bg-[color:var(--color-ink)] font-[family-name:var(--font-body)] text-white antialiased selection:bg-[color:var(--color-brand)] selection:text-white">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-[color:var(--color-brand)] focus:px-4 focus:py-3 focus:text-white">Перейти до основного вмісту</a>
@@ -103,10 +103,15 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p class="text-xs font-bold tracking-[.2em] text-[color:var(--color-accent)]">ПОДИВИСЬ БЛИЖЧЕ</p>
           <h2 id="viewer-title" class="mt-3 font-[family-name:var(--font-display)] text-3xl font-bold sm:text-4xl">iPhone 18 Pro. Усі 360°.</h2>
-          <p id="viewer-help" class="mt-4 text-[color:var(--color-muted)]">Потягни мишею або проведи пальцем по моделі. Стрілки ← → обертають, ↑ ↓ нахиляють, + / − змінюють масштаб, Home повертає початковий ракурс.</p>
+          <p id="viewer-help" class="mt-4 text-[color:var(--color-muted)]">Потягни мишею або проведи пальцем по моделі. Стрілки ← → обертають, ↑ ↓ нахиляють, + / − змінюють масштаб, Home повертає початковий ракурс. E — розібрати, C — зібрати. Натисни на деталь або обери її у списку. Коліщатко миші змінює масштаб.</p>
           <div id="phone-viewer" class="phone-viewer media-frame mt-6" tabindex="0" role="group" aria-label="Інтерактивна 3D-модель iPhone 18 Pro" aria-describedby="viewer-help viewer-status">
             <img id="viewer-poster" src="assets/images/iPhone.png" alt="iPhone 18 Pro — початковий вигляд перед завантаженням 3D" loading="lazy">
+            <div id="viewer-tooltip" class="viewer-tooltip" hidden></div>
             <button id="viewer-load" class="viewer-start focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[color:var(--color-accent)] focus-visible:ring-4 focus-visible:ring-white/20" type="button">Відкрити 360°</button>
+          </div>
+          <div class="viewer-toolbar" aria-label="Розбирання iPhone">
+            <button type="button" data-view="explode" aria-pressed="false" disabled>Розібрати iPhone</button>
+            <button type="button" data-view="assemble" aria-pressed="true" disabled>Зібрати iPhone</button>
           </div>
           <div class="viewer-toolbar" aria-label="Керування 3D-переглядом">
             <button type="button" data-view="left" disabled aria-label="Обернути ліворуч">←</button>
@@ -117,8 +122,16 @@
             <button type="button" data-view="out" disabled aria-label="Зменшити модель">−</button>
             <button type="button" data-view="reset" disabled>Скинути</button>
           </div>
-          <p id="viewer-status" role="status" class="mt-3 text-sm text-[color:var(--color-muted)]">3D завантажиться лише після натискання — близько 9 МБ. Автоматичного обертання немає.</p>
-          <p class="mt-2 text-xs text-[color:var(--color-muted)]">Модель зовнішнього вигляду: <a class="underline" href="https://www.apple.com/iphone-18-pro/">Apple</a>. Відтінок залежить від освітлення; вибір у конфігураторі не змінює матеріал цієї моделі.</p>
+          <p id="viewer-status" role="status" class="mt-3 text-sm text-[color:var(--color-muted)]">3D завантажиться лише після натискання. Автоматичного обертання немає.</p>
+          <p class="viewer-note">Навчальна схематична модель за візуальними референсами. Розташування, розміри та характеристики внутрішніх деталей не є підтвердженою конструкцією Apple.</p>
+          <div id="component-list" class="component-list" role="group" aria-label="Обрати компонент"></div>
+          <aside id="component-panel" class="component-panel" aria-labelledby="component-title" aria-live="polite" hidden>
+            <button id="component-close" type="button" aria-label="Закрити опис компонента">×</button>
+            <p class="component-eyebrow">УСЕРЕДИНІ IPHONE · НАВЧАЛЬНА СХЕМА</p>
+            <h3 id="component-title"></h3>
+            <p id="component-description"></p>
+            <p id="component-specs"></p>
+          </aside>
         </div>
 
         <!-- Lab 7: official YouTube embed; reserved 16:9 area prevents layout shift. -->
@@ -190,8 +203,8 @@
     <a href="#top" aria-label="Повернутися на початок сторінки" class="fixed bottom-5 right-5 z-40 grid h-12 w-12 place-items-center rounded-full border border-white/20 bg-[color:var(--color-card)]/95 text-lg shadow-xl transition hover:-translate-y-1 hover:border-[color:var(--color-accent)] hover:text-[color:var(--color-accent)] focus-visible:outline-2 focus-visible:outline-[color:var(--color-accent)]">↑</a>
 
     <script type="importmap">{"imports":{"three":"./vendor/three/three.module.js"}}</script>
-    <!-- МЕДІА 360°: viewer.js завантажує Three.js і локальну USDZ лише за запитом. -->
-    <script type="module" src="viewer.js"></script>
+    <!-- МЕДІА 360°: viewer.js завантажує Three.js і компонентну модель лише за запитом. -->
+    <script type="module" src="viewer.js?v=lab8-3"></script>
     <script>
       // Close the existing mobile disclosure after navigation; Escape returns focus.
       const mobileMenu = document.querySelector('#mobile-menu');
