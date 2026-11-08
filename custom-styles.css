@@ -1,0 +1,85 @@
+/* Brand tokens shared by Tailwind arbitrary-value utilities. */
+:root {
+  --color-brand: #7a1832;
+  --color-brand-hover: #92213f;
+  --color-brand-active: #641329;
+  --color-accent: #c95c7c;
+  --color-ink: #080808;
+  --color-panel: #111012;
+  --color-card: #181719;
+  --color-muted: #b3b0b5;
+  --color-soft: #828087;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-display: "Manrope", "Inter", sans-serif;
+}
+
+/* Custom brand artwork that is not practical to express with utility classes. */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+.hero-art {
+  background-color: #080808;
+  background-image:
+    linear-gradient(90deg, #080808 0%, rgba(8, 8, 8, 0.97) 32%, rgba(8, 8, 8, 0.58) 57%, rgba(8, 8, 8, 0.08) 100%),
+    url("assets/images/hero_bg.webp");
+  background-position: center, 69% center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .hero-art {
+    background-image:
+      linear-gradient(90deg, rgba(8, 8, 8, 0.94), rgba(8, 8, 8, 0.72)),
+      url("assets/images/hero_bg.webp");
+    background-position: center, 70% center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Lab 7: shared responsive third-party media surface, using existing brand tokens. */
+:root {
+  --media-radius: 1.5rem;
+  --media-shadow: 0 20px 40px rgb(0 0 0 / 0.2);
+}
+.media-frame {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: var(--media-radius);
+  background: var(--color-card);
+  box-shadow: var(--media-shadow);
+}
+
+/* A fixed stage prevents layout shifts; render only when the view changes. */
+.phone-viewer { position:relative; height:540px; background:radial-gradient(ellipse at 50% 55%,#37202a 0%,#141014 45%,#080808 80%); overflow:hidden; }
+.phone-viewer:focus-visible { outline:2px solid var(--color-accent); outline-offset:4px; }
+.phone-viewer canvas { display:block; width:100%; height:100%; cursor:grab; touch-action:pan-y; }
+.phone-viewer.dragging canvas { cursor:grabbing; }
+.phone-viewer img { width:100%; height:100%; object-fit:fill; object-position:center; }
+.phone-viewer [hidden] { display:none; }
+.viewer-start { position:absolute; left:50%; bottom:32px; transform:translateX(-50%); border:1px solid #c95c7c; border-radius:999px; padding:14px 24px; background:#7a1832; font-weight:700; white-space:nowrap; }
+.viewer-toolbar { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:20px; }
+.viewer-toolbar button { min-width:44px; min-height:44px; padding:10px 16px; border:1px solid #ffffff30; border-radius:999px; background:#181719; }
+.viewer-toolbar button:hover:not(:disabled),.viewer-start:hover { background:#7a1832; }
+.viewer-toolbar button:disabled { opacity:.4; cursor:not-allowed; }
+.viewer-toolbar button:focus-visible,.viewer-start:focus-visible { outline:3px solid #fff; outline-offset:4px; box-shadow:0 0 0 7px rgb(201 92 124 / .8); }
+@media(max-width:600px) { .phone-viewer { height:410px; } }
