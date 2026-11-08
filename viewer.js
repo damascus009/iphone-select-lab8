@@ -1,104 +1,77 @@
-// Load WebGL and the official USDZ only after an explicit user action.
-const host = document.querySelector('#phone-viewer');
-const start = document.querySelector('#viewer-load');
-const status = document.querySelector('#viewer-status');
-const buttons = [...document.querySelectorAll('[data-view]')];
-let ready = false, loading = false;
-start.addEventListener('click', async () => {
-  if (loading || ready) return;
-  loading = true; start.disabled = true; status.textContent = 'Завантаження 3D-моделі…';
-  let renderer;
-  try {
-    const [T, { USDLoader }, { RoomEnvironment }] = await Promise.all([
-      import('three'), import('./vendor/three/addons/loaders/USDLoader.js'),
-      import('./vendor/three/addons/environments/RoomEnvironment.js')
-    ]);
-    renderer = new T.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    renderer.toneMapping = T.ACESFilmicToneMapping;
-    const scene = new T.Scene();
-    const pmrem = new T.PMREMGenerator(renderer);
-    const room = new RoomEnvironment();
-    const env = pmrem.fromScene(room, 0.04);
-    scene.environment = env.texture; scene.environmentIntensity = 1.2;
-    room.dispose(); pmrem.dispose();
-    const model = await new USDLoader().loadAsync('./assets/models/iphone-18-pro.usdz', e => {
-      if (e.total) status.textContent = `Завантаження 3D-моделі: ${Math.round(e.loaded / e.total * 100)}%`;
+// Heavy modules load only after the visitor opens the viewer.
+const host=document.querySelector('#phone-viewer'), start=document.querySelector('#viewer-load'), status=document.querySelector('#viewer-status');
+const buttons=[...document.querySelectorAll('[data-view]')], panel=document.querySelector('#component-panel'), list=document.querySelector('#component-list'), tooltip=document.querySelector('#viewer-tooltip');
+let loading=false, cleanup=()=>{};
+start.addEventListener('click',async()=>{
+  if(loading || host.dataset.ready==='true')return;
+  loading=true;start.disabled=true;status.textContent='Створення 3D-моделі…';
+  let renderer,env,scene,frame=0,ro,io;
+  const events=new AbortController();
+  const on=(target,event,handler,opts={})=>target.addEventListener(event,handler,{...opts,signal:events.signal});
+  cleanup=()=>{
+    events.abort();cancelAnimationFrame(frame);ro?.disconnect();io?.disconnect();
+    const textures=new Set();scene?.traverse(o=>{o.geometry?.dispose();for(const m of [o.material].flat().filter(Boolean)){for(const value of Object.values(m))if(value?.isTexture)textures.add(value);m.dispose();}});
+    textures.forEach(t=>t.dispose());env?.dispose();renderer?.dispose();renderer?.domElement.remove();
+    list.replaceChildren();panel.hidden=true;tooltip.hidden=true;host.dataset.ready='false';buttons.forEach(b=>b.disabled=true);
+  };
+  try{
+    const [T,{RoomEnvironment},{createPhone,componentInfo}]=await Promise.all([import('three'),import('./vendor/three/addons/environments/RoomEnvironment.js'),import('./viewer-model.js?v=lab8-3')]);
+    renderer=new T.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));renderer.toneMapping=T.ACESFilmicToneMapping;
+    scene=new T.Scene();const pmrem=new T.PMREMGenerator(renderer), room=new RoomEnvironment();env=pmrem.fromScene(room,.04);scene.environment=env.texture;scene.environmentIntensity=1.5;room.dispose();pmrem.dispose();
+    const {root,parts}=createPhone(T);scene.add(root);
+    const key=new T.DirectionalLight('#ffd4df',3);key.position.set(-3,4,5);scene.add(key);
+    const rim=new T.DirectionalLight('#9caeff',2);rim.position.set(3,1,-4);scene.add(rim);
+    const camera=new T.PerspectiveCamera(36,1,.01,100),raycaster=new T.Raycaster(),point=new T.Vector2();
+    let yaw=Math.PI+.35,pitch=-.12,zoom=1,progress=0,target=0,last=0,visible=true,selected=null,hovered=null;
+    const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+    const canvas=renderer.domElement;canvas.setAttribute('aria-hidden','true');host.append(canvas);
+    const invalidate=()=>{if(!frame)frame=requestAnimationFrame(render);};
+    function render(time){
+      frame=0;if(!visible||document.hidden)return;
+      const dt=Math.min((time-last)/1000,.05);last=time;
+      progress=reduced.matches?target:T.MathUtils.damp(progress,target,6,dt);if(Math.abs(progress-target)<.001)progress=target;
+      for(const g of parts.values())g.position.copy(g.userData.base).addScaledVector(g.userData.offset,progress);
+      root.rotation.set(pitch,yaw,0);
+      const radius=2.0+progress*.7;const fov=camera.fov*Math.PI/180;const distance=radius/Math.sin(Math.min(fov/2,Math.atan(Math.tan(fov/2)*camera.aspect)));
+      camera.position.z=distance/zoom;renderer.render(scene,camera);
+      host.dataset.angle=String(Math.round(yaw*180/Math.PI));host.dataset.zoom=zoom.toFixed(2);host.dataset.explosion=progress.toFixed(3);
+      if(progress!==target)invalidate();
+    }
+    function highlight(){for(const [id,g]of parts)g.traverse(o=>{if(o.isMesh){o.material.emissive.set(id===selected?'#5a2548':id===hovered?'#373659':'#000000');o.material.emissiveIntensity=(id===selected||id===hovered) ? .8 : .25;}});invalidate();}
+    function select(id){selected=id;panel.hidden=!id;for(const b of list.children)b.setAttribute('aria-pressed',String(b.dataset.part===id));if(id){const info=componentInfo.find(x=>x[0]===id);document.querySelector('#component-title').textContent=info[1];document.querySelector('#component-description').textContent=info[2];document.querySelector('#component-specs').textContent=info[3];}highlight();}
+    function announce(){status.textContent=`${target?'Розібраний':'Зібраний'} iPhone · масштаб ${Math.round(zoom*100)}%. Оберіть деталь на моделі або у списку.`;}
+    function command(action){
+      if(action==='left')yaw-=Math.PI/8;if(action==='right')yaw+=Math.PI/8;
+      if(action==='front'){yaw=0;pitch=0;}if(action==='back'){yaw=Math.PI;pitch=0;}
+      if(action==='up')pitch-=.15;if(action==='down')pitch+=.15;
+      if(action==='in')zoom=Math.min(1.7,zoom+.1);if(action==='out')zoom=Math.max(.65,zoom-.1);
+      if(action==='explode'){target=1;yaw=-.75;pitch=-.28;zoom=1;}
+      if(action==='assemble')target=0;
+      if(action==='reset'){target=0;yaw=Math.PI+.35;pitch=-.12;zoom=1;select(null);}
+      buttons.filter(b=>['explode','assemble'].includes(b.dataset.view)).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===(target?'explode':'assemble'))));
+      tooltip.hidden=true;hovered=null;highlight();invalidate();announce();
+    }
+    for(const b of buttons){b.disabled=false;on(b,'click',()=>command(b.dataset.view));}
+    for(const [id,name]of componentInfo){const b=document.createElement('button');b.type='button';b.dataset.part=id;b.textContent=name;b.setAttribute('aria-pressed','false');on(b,'click',()=>select(id));list.append(b);}
+    on(document.querySelector('#component-close'),'click',()=>{select(null);host.focus({preventScroll:true});});
+    on(host,'keydown',e=>{const action={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down','+':'in','=':'in','-':'out',Home:'reset',e:'explode',E:'explode',c:'assemble',C:'assemble'}[e.key];if(action){e.preventDefault();command(action);}if(e.key==='Escape')select(null);});
+    function pick(e){const r=canvas.getBoundingClientRect();point.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);scene.updateMatrixWorld(true);camera.updateMatrixWorld(true);raycaster.setFromCamera(point,camera);return raycaster.intersectObject(root,true)[0]?.object.userData.part||null;}
+    let pointer=null;
+    on(canvas,'pointerdown',e=>{if(!e.isPrimary||e.button!==0)return;pointer={id:e.pointerId,x:e.clientX,y:e.clientY,yaw,pitch,moved:false};canvas.setPointerCapture(e.pointerId);host.focus({preventScroll:true});});
+    on(canvas,'pointermove',e=>{
+      if(pointer&&pointer.id===e.pointerId){const dx=e.clientX-pointer.x,dy=e.clientY-pointer.y;if(Math.hypot(dx,dy)>6)pointer.moved=true;if(pointer.moved){yaw=pointer.yaw+dx*.009;pitch=pointer.pitch+dy*.006;host.classList.add('dragging');tooltip.hidden=true;invalidate();}return;}
+      hovered=pick(e);canvas.style.cursor=hovered?'pointer':'grab';tooltip.hidden=!hovered;
+      if(hovered)tooltip.textContent=componentInfo.find(x=>x[0]===hovered)[1]+' · натисніть для опису';highlight();
     });
-    const box = new T.Box3().setFromObject(model), size = box.getSize(new T.Vector3());
-    if (!Number.isFinite(size.y) || size.y <= 0) throw new Error('Empty model');
-    const center = box.getCenter(new T.Vector3());
-    model.position.sub(center);
-    const pivot = new T.Group(); pivot.add(model); pivot.scale.setScalar(3 / Math.max(size.x, size.y, size.z));
-    scene.add(pivot);
-    const camera = new T.PerspectiveCamera(34, 1, .01, 100);
-    camera.position.z = 6.5;
-    let yaw = -.45, pitch = .1, zoom = 1, frame = 0, visible = true;
-    const canvas = renderer.domElement;
-    canvas.setAttribute('aria-hidden', 'true');
-    host.append(canvas);
-    document.querySelector('#viewer-poster').hidden = true;
-    start.hidden = true; ready = true; host.dataset.ready = 'true';
-    buttons.forEach(b => b.disabled = false);
-    const render = () => {
-      frame = 0;
-      if (!visible || document.hidden) return;
-      pivot.rotation.set(pitch, yaw, 0); camera.position.z = 6.5 / zoom;
-      renderer.render(scene, camera);
-      host.dataset.angle = String(Math.round(yaw * 180 / Math.PI));
-      host.dataset.zoom = zoom.toFixed(2);
-    };
-    const invalidate = () => { if (!frame) frame = requestAnimationFrame(render); };
-    const resize = () => {
-      const {width, height} = host.getBoundingClientRect();
-      renderer.setSize(width, height, false); camera.aspect = width / height;
-      camera.updateProjectionMatrix(); invalidate();
-    };
-    new ResizeObserver(resize).observe(host);
-    new IntersectionObserver(entries => { visible = entries[0].isIntersecting; if (visible) invalidate(); }).observe(host);
-    document.addEventListener('visibilitychange', invalidate);
-    const announce = () => { status.textContent = `Обертання ${((Math.round(yaw * 180 / Math.PI) % 360) + 360) % 360}°. Масштаб ${Math.round(zoom * 100)}%.`; };
-    const command = action => {
-      if (action === 'left') yaw -= Math.PI / 8;
-      if (action === 'right') yaw += Math.PI / 8;
-      if (action === 'front') { yaw = 0; pitch = 0; }
-      if (action === 'back') { yaw = Math.PI; pitch = 0; }
-      if (action === 'up') pitch = Math.max(-.65, pitch - .12);
-      if (action === 'down') pitch = Math.min(.65, pitch + .12);
-      if (action === 'in') zoom = Math.min(1.45, zoom + .1);
-      if (action === 'out') zoom = Math.max(.7, zoom - .1);
-      if (action === 'reset') { yaw = -.45; pitch = .1; zoom = 1; }
-      invalidate(); announce();
-    };
-    buttons.forEach(b => b.addEventListener('click', () => command(b.dataset.view)));
-    host.addEventListener('keydown', e => {
-      const action = {ArrowLeft:'left',ArrowRight:'right',ArrowUp:'up',ArrowDown:'down','+':'in','=':'in','-':'out',Home:'reset'}[e.key];
-      if (action) { e.preventDefault(); command(action); }
-    });
-    let pointer = null;
-    canvas.addEventListener('pointerdown', e => {
-      if (!e.isPrimary || e.button !== 0) return;
-      pointer = {id:e.pointerId, x:e.clientX, y:e.clientY, yaw, pitch};
-      canvas.setPointerCapture(e.pointerId); host.focus({preventScroll:true}); host.classList.add('dragging');
-    });
-    canvas.addEventListener('pointermove', e => {
-      if (!pointer || pointer.id !== e.pointerId) return;
-      yaw = pointer.yaw + (e.clientX - pointer.x) / host.clientWidth * Math.PI * 2;
-      // Vertical touch scrolling stays native; mouse supports a limited tilt.
-      if (e.pointerType !== 'touch') pitch = Math.max(-.65, Math.min(.65, pointer.pitch + (e.clientY - pointer.y) * .006));
-      invalidate();
-    });
-    const release = e => {
-      if (!pointer || pointer.id !== e.pointerId) return;
-      pointer = null; host.classList.remove('dragging'); announce();
-      if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
-    };
-    canvas.addEventListener('pointerup',release); canvas.addEventListener('pointercancel',release); canvas.addEventListener('lostpointercapture',release);
-    canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); status.textContent = '3D-контекст втрачено. Оновіть сторінку, щоб відновити перегляд.'; buttons.forEach(b => b.disabled = true); });
-    resize(); announce(); host.focus({preventScroll:true});
-  } catch (error) {
-    renderer?.dispose(); loading = false; start.disabled = false;
-    status.textContent = '3D не вдалося відкрити. Перевірте підтримку WebGL та з’єднання, потім спробуйте ще раз. Фото залишається доступним.';
-    console.error('iPhone 360:', error);
-  }
+    const release=e=>{if(!pointer||pointer.id!==e.pointerId)return;const click=!pointer.moved&&e.type==='pointerup';pointer=null;host.classList.remove('dragging');if(canvas.hasPointerCapture(e.pointerId))canvas.releasePointerCapture(e.pointerId);if(click)select(pick(e));announce();};
+    on(canvas,'pointerup',release);on(canvas,'pointercancel',release);on(canvas,'lostpointercapture',release);
+    on(canvas,'pointerleave',()=>{hovered=null;tooltip.hidden=true;highlight();});
+    on(canvas,'wheel',e=>{e.preventDefault();command(e.deltaY<0?'in':'out');},{passive:false});
+    on(canvas,'webglcontextlost',e=>{e.preventDefault();cleanup();loading=false;start.hidden=false;start.disabled=false;document.querySelector('#viewer-poster').hidden=false;status.textContent='3D-контекст втрачено. Натисніть «Відкрити 360°», щоб відновити.';});
+    const resize=()=>{const {width,height}=host.getBoundingClientRect();if(!width||!height)return;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();invalidate();};
+    ro=new ResizeObserver(resize);ro.observe(host);io=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible){last=performance.now();invalidate();}});io.observe(host);
+    on(document,'visibilitychange',()=>{last=performance.now();invalidate();});on(reduced,'change',invalidate);
+    document.querySelector('#viewer-poster').hidden=true;start.hidden=true;host.dataset.ready='true';loading=false;resize();command('reset');host.focus({preventScroll:true});
+  }catch(error){cleanup();loading=false;start.disabled=false;start.hidden=false;document.querySelector('#viewer-poster').hidden=false;status.textContent='Не вдалося відкрити 3D. Перевірте WebGL і доступність файлів, потім спробуйте ще раз.';console.error('iPhone 360:',error);}
 });
+window.addEventListener('pagehide',e=>{if(!e.persisted)cleanup();});
