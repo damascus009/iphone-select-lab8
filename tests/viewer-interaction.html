@@ -1,0 +1,7 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>Viewer interaction checks</title><script type="importmap">{"imports":{"three":"../vendor/three/three.module.js"}}</script>
+<style>#phone-viewer{width:640px;height:540px}canvas{width:100%;height:100%}[hidden]{display:none}</style>
+<h1>Viewer interaction checks</h1><pre id="results">Running…</pre>
+<div id="phone-viewer" tabindex="0"><img id="viewer-poster" hidden><div id="viewer-tooltip" hidden></div><button id="viewer-load">Відкрити 360°</button></div>
+<button data-view="explode">Розібрати iPhone</button><button data-view="assemble">Зібрати iPhone</button><button data-view="side">Збоку</button><button data-view="reset">Скинути</button>
+<p id="viewer-status"></p><div id="component-list"></div><aside id="component-panel" hidden><button id="component-close">×</button><h2 id="component-title"></h2><p id="component-description"></p><p id="component-specs"></p><a id="component-source"></a></aside>
+<script type="module" src="viewer-interaction.js"></script></html>

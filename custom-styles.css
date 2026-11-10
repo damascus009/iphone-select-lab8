@@ -100,3 +100,5 @@ summary::-webkit-details-marker {
 .component-panel #component-specs { color:#bcb4c1; margin-top:8px; }
 .component-eyebrow { font-size:10px; letter-spacing:.16em; color:#e49fb7; padding-right:35px; }
 .component-panel button { position:absolute; right:12px; top:12px; width:44px; height:44px; font-size:25px; }
+
+.viewer-source { display:inline-block; margin-top:14px; color:#dbb9c5; text-decoration:underline; font-size:13px; }
