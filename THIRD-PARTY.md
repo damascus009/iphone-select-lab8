@@ -26,3 +26,8 @@ Three.js 0.187.0 (MIT), локальні модулі, WebGL. Динамічне
 ## Компонентна 3D-модель ЛР8
 
 `viewer-model.js` — процедурна навчальна геометрія й згенерована Canvas-текстура екрана. Референси використовувались як візуальний орієнтир; прикріплені фотографії не включено до сайту. Основні вузли уточнено за Apple Internal View / Parts / Exploded View 10.11.2026; деталізація схематична, див. MODEL-NOTES.md. Вихідний USDZ збережено як попередній ресурс.
+
+## Локальні шрифти — оптимізація 12.11.2026
+
+Inter та Manrope: Google Fonts, SIL Open Font License 1.1. Ліцензії збережені в `assets/fonts/inter-OFL.txt` та `assets/fonts/manrope-OFL.txt`. Джерела: https://github.com/google/fonts/tree/main/ofl/inter і https://github.com/google/fonts/tree/main/ofl/manrope.
+WOFF2 містять латиницю, кирилицю (включно з Ґґ), пунктуацію та знак гривні. Inter: wght 400–700, opsz 14; Manrope: wght 500–800. Підмножини створено fontTools, вихідні назви збережені згідно з ліцензіями.

@@ -1,0 +1,25 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Performance resource checks</title>
+<style>iframe{width:100%;height:800px;border:0}pre{white-space:pre-wrap}</style>
+<h1>Performance resource checks</h1><pre id="results">Running…</pre><iframe title="Site under test" src="../"></iframe>
+<script>
+const frame=document.querySelector('iframe'),result=document.querySelector('#results');
+frame.addEventListener('load',async()=>{
+ const rows=[];const check=(ok,label)=>{rows.push((ok?'PASS ':'FAIL ')+label);if(!ok)throw Error(label);};
+ try{
+  const doc=frame.contentDocument,win=frame.contentWindow;await doc.fonts.ready;
+  const resources=win.performance.getEntriesByType('resource');
+  check(doc.querySelectorAll('link[rel=stylesheet]').length===1,'one bundled stylesheet');
+  check(!resources.some(r=>/fonts\.googleapis|fonts\.gstatic/.test(r.name)),'no Google Fonts network chain');
+  check(!resources.some(r=>/three\.(module|core)|viewer-model/.test(r.name)),'3D modules deferred until user action');
+  const hero=resources.filter(r=>/hero-(960|1672)-v1\.webp/.test(r.name));
+  check(hero.length===1,'exactly one responsive hero request');
+  check(hero[0].decodedBodySize<30000,'hero under 30 KB: '+hero[0].decodedBodySize);
+  for(const family of ['Inter','Manrope'])check(doc.fonts.check(`16px ${family}`,'Україна Ґґ Єє Іі Її'),'local Ukrainian font '+family);
+  check(doc.documentElement.scrollWidth===doc.documentElement.clientWidth,'no horizontal overflow');
+  rows.push('Loaded hero: '+hero[0].name.split('/').pop());
+  rows.push('Image candidates: '+[...doc.querySelectorAll('.model-card img')].map(i=>i.currentSrc.split('/').pop()).join(', '));
+  rows.push('ALL CHECKS PASSED');
+ }catch(e){rows.push('ERROR '+e.message);}
+ result.textContent=rows.join('\n');
+});
+</script></html>
