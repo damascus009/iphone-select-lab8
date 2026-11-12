@@ -72,7 +72,7 @@ summary::-webkit-details-marker {
 /* A fixed stage prevents layout shifts; render only when the view changes. */
 .phone-viewer { position:relative; height:540px; background:radial-gradient(ellipse at 50% 55%,#37202a 0%,#141014 45%,#080808 80%); overflow:hidden; }
 .phone-viewer:focus-visible { outline:2px solid var(--color-accent); outline-offset:4px; }
-.phone-viewer canvas { display:block; width:100%; height:100%; cursor:grab; touch-action:pan-y; }
+.phone-viewer canvas { display:block; width:100%; height:100%; cursor:grab; touch-action:none; }
 .phone-viewer.dragging canvas { cursor:grabbing; }
 .phone-viewer img { width:100%; height:100%; object-fit:fill; object-position:center; }
 .phone-viewer [hidden] { display:none; }

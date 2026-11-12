@@ -1,4 +1,4 @@
-// Existing procedural assembly, refined against Apple 127390 (2026-11-10).
+// Existing procedural assembly, visually refined against user references (2026-11-12).
 // 1 scene unit = 50 mm. External proportions are specified; internal meshes are
 // simplified interpretations of the repair illustrations, NOT manufacturing CAD.
 export const modelDimensions = Object.freeze({width:1.438,height:3,depth:.175,frameBack:-.0775,frameFront:.0675});
@@ -8,10 +8,10 @@ export const componentInfo = [
  ['display','Дисплей','Відображає зображення та приймає дотики.','Модуль і його клейовий контур наведено в Apple Exploded View.'],
  ['battery','Акумулятор','Забезпечує живлення пристрою.','Форма спрощена за ілюстрацією; парний вузол із випарною камерою.'],
  ['vapor','Випарна камера','Розподіляє тепло від електроніки.','Apple позначає її прикріпленою до акумулятора: у макеті вони рухаються разом.'],
- ['board','Системна плата','З’єднує обчислювальні та периферійні вузли.','Основні зони узгоджені з Internal View; доріжки та розміщення мікросхем схематичні.'],
+ ['board','Системна плата','З’єднує обчислювальні та периферійні вузли.','Форма плати, доріжки та розміщення мікросхем уточнені за візуальним референсом і є схематичними.'],
  ['processor','Процесор','Обробляє дані та графіку.','Навчальна вставка: точні корпус, контакти й координати чипа не підтверджені посібником.'],
  ['shields','Екрани плати','Екранують електронні компоненти.','Контури спрощено за виглядом плати; внутрішня структура не заявляється.'],
- ['rear','Модулі задніх камер','Формують фото й відео.','Три корпуси оптики, спільне кріплення та шлейфи. Оптична будова схематична.'],
+ ['rear','Основний модуль камери','Формують фото й відео.','Окремий корпус оптики, кріплення та шлейф. Оптична будова схематична.'],
  ['camera-cover','Захисні вікна камер','Захищають оптику від зовнішнього впливу.','Знижений рельєф — візуальна апроксимація; висота виступу не є заводським розміром.'],
  ['front','Фронтальна камера','Забезпечує фронтальне зображення.','Окремий вузол за переліком Apple; лінзи та конектор спрощені.'],
  ['faceid','Сенсори Face ID','Забезпечують роботу TrueDepth.','Face ID підтверджено Apple; поділ на сенсори та їхня геометрія в макеті схематичні.'],
@@ -29,6 +29,16 @@ export const componentInfo = [
  ['fasteners','Кріплення та заземлення','Фіксують модулі й забезпечують контакт із корпусом.','Кількість, різьба та координати показаних гвинтів умовні; це не карта сервісних гвинтів.'],
  ['display-seal','Контур дисплея','Ущільнює з’єднання дисплея й корпусу.','Display adhesive документований Apple; товщина умовна.'],
  ['back-seal','Контур задньої панелі','Ущільнює задню панель.','Back glass adhesive документований Apple; товщина умовна.']
+ ,['oled','OLED і сенсорний шар','Формує зображення під захисним склом.','Окремий навчальний шар за візуальним референсом.'],
+ ['display-shield','Опорна пластина дисплея','Підтримує екранний модуль.','Схематична пластина з кріпленнями й контактами.'],
+ ['rear-shield','Опорна пластина задньої панелі','Підтримує задній вузол.','Навчальна геометрія за референсом, не заводська деталь.'],
+ ['graphite','Графітовий шар','Ілюструє розподіл тепла.','Контур і товщина умовні.'],
+ ['rear-wide','Другий модуль камери','Окремий оптичний модуль.','Внутрішня оптика схематична.'],
+ ['rear-tele','Третій модуль камери','Окремий оптичний модуль.','Внутрішня оптика схематична.'],
+ ['optics','Оптичні елементи','Ілюструють багатошарову оптику.','Лінзи рознесені для огляду; це не реальна схема об’єктива.'],
+ ['optics-mid','Оптика другого модуля','Ілюструє лінзову групу.','Схематична оптика за референсом.'],
+ ['optics-inner','Оптика третього модуля','Ілюструє лінзову групу.','Схематична оптика за референсом.'],
+ ['brackets','Внутрішні кронштейни','Ілюструють кріплення модулів.','Форма, кількість і розташування за візуальним референсом.']
 ].map(([id,name,purpose,detail])=>[id,name,purpose,detail+' '+schematic,manual]);
 
 export function createPhone(T) {
@@ -36,8 +46,8 @@ export function createPhone(T) {
   const {width:W,height:H,frameBack:BACK,frameFront:FRONT}=modelDimensions;
   const R=.205;
   const mat=(color,metalness=.5,roughness=.45)=>new T.MeshStandardMaterial({color,metalness,roughness});
-  const burgundy=mat('#38252a',.72,.49), edge=mat('#4b393d',.78,.4), black=mat('#111418',.1,.58), silver=mat('#8b9095',.8,.4), copper=mat('#ad7845',.75,.4), pcb=mat('#172c29',.2,.6), graphite=mat('#24262a',.3,.65);
-  const glass=new T.MeshPhysicalMaterial({color:'#0c1720',metalness:.12,roughness:.13,clearcoat:1,clearcoatRoughness:.12,ior:1.5});
+  const burgundy=mat('#35151e',.62,.37), edge=mat('#59323c',.72,.31), black=mat('#111418',.1,.58), silver=mat('#8b9095',.8,.4), copper=mat('#ad7845',.75,.4), pcb=mat('#172c29',.2,.6), graphite=mat('#24262a',.3,.65);
+  const glass=new T.MeshPhysicalMaterial({color:'#03070c',metalness:.06,roughness:.10,clearcoat:1,clearcoatRoughness:.12,ior:1.5});
   const materials=new Map();
   function part(id,base,offset,stage=.2) {
     const g=new T.Group();g.name=id;g.position.set(...base);
@@ -54,8 +64,8 @@ export function createPhone(T) {
   }
   function slab(g,w,h,d,r,material,pos=[0,0,0]){
     // Bevels stay INSIDE requested bounds. Shared mating planes remain exact.
-    const b=Math.min(.002,d*.15,r*.12),s=rounded(w-2*b,h-2*b,Math.max(.0001,r-b));
-    const geo=new T.ExtrudeGeometry(s,{depth:d-2*b,bevelEnabled:true,bevelSize:b,bevelThickness:b,bevelSegments:1,steps:1,curveSegments:Math.max(w,h)<.55?3:12});geo.translate(0,0,-(d-2*b)/2);return mesh(g,geo,material,pos);
+    const b=Math.min(.007,d*.23,r*.20),s=rounded(w-2*b,h-2*b,Math.max(.0001,r-b));
+    const geo=new T.ExtrudeGeometry(s,{depth:d-2*b,bevelEnabled:true,bevelSize:b,bevelThickness:b,bevelSegments:Math.max(w,h)<.55?1:3,steps:1,curveSegments:Math.max(w,h)<.55?3:12});geo.translate(0,0,-(d-2*b)/2);return mesh(g,geo,material,pos);
   }
   function ring(g,w,h,r,inset,d,material,pos=[0,0,0]){
     const s=rounded(w,h,r);s.holes.push(rounded(w-inset*2,h-inset*2,r-inset,T.Path));
@@ -72,82 +82,121 @@ export function createPhone(T) {
   }
   // Closed machined perimeter, replacing the four disconnected old rails.
   const chassis=part('chassis',[0,0,0],[0,0,0],0);
-  ring(chassis,W,H,R,.036,FRONT-BACK,burgundy,[0,0,(FRONT+BACK)/2]);
+  // Small bevels stay within the shared front/back mating planes.
+  const frameShape=rounded(W-.008,H-.008,R-.004);
+  frameShape.holes.push(rounded(W-.072,H-.072,R-.036,T.Path));
+  const frameGeo=new T.ExtrudeGeometry(frameShape,{depth:FRONT-BACK-.008,bevelEnabled:true,bevelSize:.004,bevelThickness:.004,bevelSegments:3,curveSegments:20,steps:1});
+  frameGeo.translate(0,0,BACK+.004);mesh(chassis,frameGeo,burgundy);
   // Button capsules stay close to the side wall; all positions share the same datum.
-  for(const [x,y,h] of [[W/2+.004,.55,.31],[-W/2-.004,.35,.20],[-W/2-.004,.64,.20],[-W/2-.004,.96,.11],[W/2+.004,-.5,.24]])slab(chassis,.012,h,.044,.006,edge,[x,y,-.002]);
+  for(const [x,y,h] of [[W/2+.004,.55,.31],[-W/2-.004,.35,.20],[-W/2-.004,.64,.20],[-W/2-.004,.96,.11],[W/2+.004,-.5,.24]]){
+    const gasket=slab(chassis,.052,h+.012,.003,.024,black,[Math.sign(x)*(W/2+.001),y,-.002]);gasket.rotation.y=Math.PI/2;
+    const button=slab(chassis,.044,h,.012,.021,edge,[x,y,-.002]);button.rotation.y=Math.PI/2;
+  }
   for(const x of [-W/2-.0003,W/2+.0003])for(const y of [-1.07,1.07])slab(chassis,.001,.027,.142,.0004,mat('#78716d',.05,.75),[x,y,-.005]);
   const back=part('back',[0,0,-.0825],[0,0,-1.2],0);
   slab(back,W,H,.01,R,burgundy);
-  slab(back,1.32,2.03,.0006,.17,mat('#32262b',.25,.62),[0,-.38,-.0053]);
+  // A continuous back finish replaces the mismatched grey inset.
+  slab(back,W-.035,H-.035,.0006,R-.018,mat('#32151e',.32,.42),[0,0,-.0053]);
   const emblem=new T.Shape();emblem.moveTo(0,.105);emblem.bezierCurveTo(.15,.20,.22,.07,.14,-.08);emblem.bezierCurveTo(.08,-.21,.02,-.13,0,-.14);emblem.bezierCurveTo(-.04,-.13,-.11,-.21,-.17,-.06);emblem.bezierCurveTo(-.23,.10,-.12,.20,0,.105);
   const logo=mesh(back,new T.ShapeGeometry(emblem,12),mat('#655255',.55,.5),[0,-.25,-.0058]);logo.rotation.y=Math.PI;
   const leaf=mesh(back,new T.SphereGeometry(.045,12,8),mat('#655255',.55,.5),[-.035,-.065,-.006]);leaf.scale.set(.5,1.1,.01);leaf.rotation.z=-.6;
   const display=part('display',[0,0,FRONT],[0,0,2.45],0);
   slab(display,W,H,.012,R,edge,[0,0,.006]);slab(display,W,H,.008,R,black,[0,0,.016]);
   const c=document.createElement('canvas'); c.width=512;c.height=1024; const ctx=c.getContext('2d');
-  const grad=ctx.createLinearGradient(0,0,512,1024);grad.addColorStop(0,'#130f29');grad.addColorStop(.5,'#723d6d');grad.addColorStop(1,'#100d23');ctx.fillStyle=grad;ctx.fillRect(0,0,512,1024);
-  for(let i=0;i<4;i++){const glow=ctx.createRadialGradient(100+i*140,650-i*130,5,100+i*140,650-i*130,360);glow.addColorStop(0,'#df93c780');glow.addColorStop(.6,'#bd649940');glow.addColorStop(1,'#1b092000');ctx.fillStyle=glow;ctx.fillRect(0,0,512,1024);}
-  ctx.fillStyle='#ffffffdd';ctx.textAlign='center';ctx.font='300 92px sans-serif';ctx.fillText('9:41',256,245);ctx.font='24px sans-serif';ctx.fillText('iPhone Select',256,305);
+  ctx.fillStyle='#13070d';ctx.fillRect(0,0,512,1024);
+  // Burgundy arcs generated locally, matching the supplied visual direction.
+  for(const [cx,cy,rx,ry]of [[-170,-170,850,650],[700,1060,850,650]]){
+    const grad=ctx.createRadialGradient(cx,cy,100,cx,cy,850);
+    grad.addColorStop(0,'#190911');grad.addColorStop(.65,'#39121f');grad.addColorStop(.90,'#602738');grad.addColorStop(1,'#a46270');
+    ctx.fillStyle=grad;ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#b27b8780';ctx.lineWidth=1.3;ctx.stroke();
+  }
   const texture=new T.CanvasTexture(c);texture.colorSpace=T.SRGBColorSpace;
   const screen=slab(display,1.33,2.89,.0004,.175,new T.MeshPhysicalMaterial({map:texture,emissiveMap:texture,emissive:0xffffff,emissiveIntensity:.15,roughness:.22,metalness:0,clearcoat:.45,clearcoatRoughness:.18}),[0,0,.0202]);
   const uv=screen.geometry.attributes.uv, vertices=screen.geometry.attributes.position;
   for(let i=0;i<uv.count;i++)uv.setXY(i,(vertices.getX(i)+.665)/1.33,(vertices.getY(i)+1.445)/2.89);
   slab(display,.32,.075,.0006,.037,black,[0,1.31,.0207]);
   slab(display,.34,.009,.0005,.004,silver,[0,-1.36,.0207]);
-  // Rear display shield and connector remain part of the display module.
-  slab(display,1.27,2.79,.003,.16,graphite,[0,0,-.0015]);
-  ribbon(display,[[.48,-.4,-.006],[.48,.12,-.006],[.27,.12,-.006]],.08);
+  const oled=part('oled',[0,0,.063],[0,0,0],.10);
+  slab(oled,1.31,2.83,.005,.17,black);
+  ring(oled,1.32,2.84,.17,.009,.002,copper,[0,0,.0038]);
+  ribbon(oled,[[.48,-.9,-.004],[.48,-1.25,-.004],[.24,-1.25,-.004]],.075);connector(oled,.24,-1.25,-.006);
+  const displayShield=part('display-shield',[0,0,.056],[0,0,0],.16);
+  slab(displayShield,1.29,2.81,.005,.16,silver);
+  for(const x of [-.59,.59])for(const y of [-1.1,-.55,0,.55,1.1]){
+    ring(displayShield,.065,.10,.018,.012,.003,graphite,[x,y,.004]);
+  }
+  slab(displayShield,1.15,2.50,.001,.13,graphite,[0,0,-.0035]);
   const displaySeal=part('display-seal',[0,0,FRONT-.001],[0,0,2.05],.08);
   ring(displaySeal,W-.072,H-.072,R-.036,.012,.002,black);
   const backSeal=part('back-seal',[0,0,BACK+.001],[0,0,-.85],.08);
   ring(backSeal,W-.072,H-.072,R-.036,.012,.002,black);
 
-  const battery=part('battery',[.035,-.46,-.006],[0,0,1.30],.22);
-  slab(battery,1.09,1.28,.074,.065,silver);
-  slab(battery,1.045,1.235,.003,.05,black,[0,0,.0385]);
+  const battery=part('battery',[.18,-.40,-.006],[0,0,1.30],.22);
+  slab(battery,.86,1.48,.074,.065,silver);
+  slab(battery,.82,1.44,.003,.05,black,[0,0,.0385]);
   label(battery,'Li-ion  ·  SCHEMATIC',.67,.16,[0,-.12,.0402]);
-  for(const x of [-.45,.45])slab(battery,.026,1.19,.002,.007,graphite,[x,0,.040]);
-  for(const y of [-.52,.52]){slab(battery,.14,.03,.004,.008,graphite,[-.27,y,.041]);slab(battery,.14,.03,.004,.008,graphite,[.27,y,.041]);}
-  connector(battery,.35,.65,.015);
-  const vapor=part('vapor',[.035,-.46,.036],[0,0,1.30],.22);
-  slab(vapor,1.10,1.29,.006,.065,graphite);
+  for(const x of [-.35,.35])slab(battery,.026,1.39,.002,.007,graphite,[x,0,.040]);
+  for(const y of [-.64,.64]){slab(battery,.14,.03,.004,.008,graphite,[-.27,y,.041]);slab(battery,.14,.03,.004,.008,graphite,[.27,y,.041]);}
+  connector(battery,.20,.75,.015);
+  const vapor=part('vapor',[.18,-.40,.036],[0,0,1.30],.22);
+  slab(vapor,.87,1.49,.006,.065,graphite);
   // The thermal plate and battery keep their assembled relationship throughout.
-  for(let i=0;i<7;i++)slab(vapor,.008,1.16,.001,.002,silver,[-.42+i*.14,0,.0036]);
+  for(let i=0;i<7;i++)slab(vapor,.006,1.37,.001,.002,silver,[-.33+i*.11,0,.0036]);
   label(vapor,'THERMAL ASSEMBLY',.65,.10,[0,.5,.0042]);
 
-  const board=part('board',[-.43,.76,-.008],[-.60,.12,.63],.32);
-  slab(board,.36,1.06,.018,.045,pcb);
-  slab(board,.63,.28,.018,.04,pcb,[.12,-.40,0]);
-  for(let row=0;row<8;row++)for(let col=0;col<3;col++){
-    const x=-.115+col*.105,y=-.28+row*.1;
-    slab(board,.066,.052,.013,.006,black,[x,y,.016]);
-    for(const side of [-1,1])slab(board,.014,.035,.004,.002,silver,[x+side*.041,y,.013]);
+  const board=part('board',[-.48,.13,-.008],[-.60,.12,.63],.32);
+  slab(board,.36,2.12,.018,.045,pcb);
+
+  // Unequal packages and passive banks replace the repetitive chip grid.
+  for(const [x,y,w,h]of [[0,.85,.21,.18],[-.03,.55,.16,.22],[.02,.19,.22,.24],[0,-.20,.24,.28],[0,-.60,.22,.25],[0,-.90,.24,.12]]){
+    slab(board,w,h,.014,.008,black,[x,y,.016]);
+    for(let i=0;i<8;i++)for(const side of [-1,1])slab(board,.012,.006,.004,.001,copper,[x+side*(w/2+.006),y-h*.4+i*h*.114,.014]);
   }
-  for(let i=0;i<10;i++)slab(board,.005,.78,.001,.001,copper,[-.155+i*.032,.07,.0098]);
-  for(const y of [-.48,.50])screw(board,0,y,.015);
-  connector(board,.28,-.42,.019,.18);
-  const cpu=part('processor',[-.43,.91,.022],[-.60,.12,1.00],.4);
+  for(let i=0;i<64;i++){
+    const x=i%2?-.145:.145,y=-.96+Math.floor(i/2)*.060;
+    slab(board,.024,.023,.009,.002,i%3?silver:black,[x,y,.014]);
+  }
+  for(let i=0;i<14;i++){disc(board,.009,.001,copper,[-.08+(i%4)*.054,-.32+Math.floor(i/4)*.19,.010]);}
+  for(let i=0;i<10;i++)slab(board,.004,1.95,.001,.001,copper,[-.155+i*.032,0,.0098]);
+  for(const y of [-1.01,1.01])screw(board,0,y,.015);
+  connector(board,0,-1.02,.019,.18);
+  const cpu=part('processor',[-.48,.32,.022],[-.60,.12,1.00],.4);
   slab(cpu,.23,.22,.012,.012,black);label(cpu,'SoC',.17,.06,[0,0,.0066]);
   for(let i=0;i<8;i++)for(const x of [-.12,.12])slab(cpu,.014,.008,.004,.001,copper,[x,-.09+i*.026,0]);
-  const shields=part('shields',[-.43,.76,.045],[-.60,.12,1.32],.15);
-  for(const [x,y,w,h]of [[0,.16,.32,.47],[.10,-.36,.52,.26]]){
+  const shields=part('shields',[-.48,.13,.045],[-.60,.12,1.32],.15);
+  for(const [x,y,w,h]of [[0,.55,.32,.60],[0,-.19,.32,.50],[0,-.70,.30,.32]]){
     slab(shields,w,h,.006,.024,silver,[x,y,0]);ring(shields,w-.024,h-.024,.018,.007,.004,graphite,[x,y,.005]);
   }
 
-  const rear=part('rear',[.26,.93,-.008],[.72,.2,.65],.30);
-  for(const [x,y,w,h]of [[.12,.20,.33,.32],[.12,-.20,.36,.34],[-.26,0,.33,.40]]){
-    slab(rear,w,h,.086,.045,silver,[x,y,0]);slab(rear,w-.035,h-.035,.004,.035,black,[x,y,.045]);
-    disc(rear,.113,.008,black,[x,y,-.047]);disc(rear,.086,.001,glass,[x,y,-.0515]);
-    ribbon(rear,[[x,y,.048],[x,y-.22,.048],[x-.08,y-.22,.048]],.035);
+  const cameraCenters=[[.38,1.13,'rear'],[.38,.73,'rear-wide'],[0,.93,'rear-tele']];
+  for(const [x,y,id]of cameraCenters){
+    const rear=part(id,[x,y,-.008],[0,0,0],.30);
+    slab(rear,.33,.34,.080,.045,silver);slab(rear,.30,.31,.004,.035,black,[0,0,.042]);
+    for(const xx of [-.139,.139])for(const yy of [-.143,.143])screw(rear,xx,yy,.045);
+    disc(rear,.122,.008,black,[0,0,-.044]);disc(rear,.092,.001,glass,[0,0,-.049]);
+    disc(rear,.105,.008,black,[0,0,.048]);disc(rear,.070,.003,glass,[0,0,.054]);
+    ribbon(rear,[[0,-.1,.046],[0,-.24,.046],[-.08,-.24,.046]],.045);connector(rear,-.08,-.24,.050,.09);
+  }
+  for(const [cameraIndex,id]of ['optics','optics-mid','optics-inner'].entries()){
+    const [x,y]=cameraCenters[cameraIndex];
+    const optics=part(id,[x,y,-.062],[0,0,0],.35);
+    optics.userData.unbatched=true;optics.userData.localMotions=[];
+    for(let i=0;i<3;i++){
+      const lens=disc(optics,.078-i*.008,.001,glass,[0,0,-i*.003]);
+      const rim=mesh(optics,new T.TorusGeometry(.078-i*.008,.002,4,32),silver,[0,0,-i*.003]);
+      for(const o of [lens,rim])optics.userData.localMotions.push({object:o,base:o.position.clone(),offset:new T.Vector3(0,0,-i*.20)});
+    }
   }
   // A shallow exterior plateau with dark, planar sapphire-like windows.
   const cover=part('camera-cover',[0,1.02,-.0935],[0,0,-1.2],0);
   slab(cover,1.30,.91,.012,.16,burgundy);
   for(const [x,y]of [[.38,.11],[.38,-.29],[0,-.09]]){
-    disc(cover,.150,.006,edge,[x,y,-.009]);
-    disc(cover,.139,.003,black,[x,y,-.0135]);
-    disc(cover,.117,.001,glass,[x,y,-.0155]);
-    disc(cover,.057,.0008,black,[x,y,-.0164]);
+    disc(cover,.169,.004,edge,[x,y,-.009]);
+    disc(cover,.157,.003,black,[x,y,-.0135]);
+    disc(cover,.145,.001,glass,[x,y,-.0155]);
+    disc(cover,.061,.0008,black,[x,y,-.0164]);
+    disc(cover,.035,.0007,glass,[x,y,-.0172]);
+    disc(cover,.013,.0004,mat('#4b6a80',.35,.17),[x-.012,y+.014,-.0178]);
     const coating=mesh(cover,new T.TorusGeometry(.093,.0014,4,32),mat('#263c49',.4,.23),[x,y,-.0162]);
   }
   disc(cover,.052,.001,mat('#c8c6bb',.05,.55),[-.43,.15,-.0066]);
@@ -176,7 +225,7 @@ export function createPhone(T) {
 
   const coil=part('coil',[0,-.4,-.065],[0,0,-.50],.22);
   disc(coil,.48,.005,graphite,[0,0,0]);
-  for(let i=0;i<15;i++)mesh(coil,new T.TorusGeometry(.235+i*.012,.0035,4,64),copper,[0,0,.006]);
+  for(let i=0;i<24;i++)mesh(coil,new T.TorusGeometry(.14+i*.012,.0035,4,64),copper,[0,0,.006]);
   for(let i=0;i<16;i++){const a=i*Math.PI/8,o=slab(coil,.055,.13,.004,.008,silver,[Math.sin(a)*.449,Math.cos(a)*.449,.005]);o.rotation.z=-a;}
   ribbon(coil,[[.12,.43,0],[.12,.71,0],[.3,.71,0]],.05);
   const antenna=part('antenna',[.53,1.35,-.015],[.40,.40,.4],.32);
@@ -192,11 +241,36 @@ export function createPhone(T) {
     screw(fasteners,x,y,0);slab(chassis,.036,.058,.06,.009,silver,[x,y,-.025]);
     slab(fasteners,.018,.045,.003,.004,copper,[x,y+.035,0]);
   }
+  const rearShield=part('rear-shield',[0,0,-.073],[0,0,0],.12);
+  ring(rearShield,1.31,2.85,.17,.07,.003,silver);
+  for(const x of [-.53,.53])slab(rearShield,.12,2.38,.003,.025,silver,[x,0,0]);
+  for(const y of [-1.1,.32])slab(rearShield,1.12,.12,.003,.025,silver,[0,y,0]);
+  const graphiteLayer=part('graphite',[0,-.4,-.069],[0,0,0],.18);
+  ring(graphiteLayer,1.18,1.72,.10,.085,.002,graphite);
+  const brackets=part('brackets',[0,0,.049],[0,0,0],.24);
+  for(const x of [-.62,.62])for(const y of [-.9,-.2,.65]){
+    ring(brackets,.08,.28,.02,.013,.004,silver,[x,y,0]);
+    disc(brackets,.012,.002,black,[x,y+.10,.003]);
+  }
+  // Exploded layout follows the reference's readable left-to-right layers.
+  // The final locations are presentation coordinates, not a repair sequence.
+  const layout={
+    display:[-.55,0,2.5],oled:[-.40,0,1.95],'display-shield':[-.25,0,1.4],'display-seal':[0,0,.8],
+    chassis:[0,0,0],brackets:[-.12,0,-.4],board:[.65,-.03,-.85],processor:[.65,-.03,-.45],shields:[.28,0,-.1],
+    battery:[.65,-.04,-1.45],vapor:[.65,-.04,-1.45],rear:[.27,.60,-1.45],'rear-wide':[.27,.45,-1.45],'rear-tele':[.65,-.30,-1.45],
+    optics:[.27,.60,-1.95],'optics-mid':[.27,.45,-1.95],'optics-inner':[.65,-.30,-1.95],coil:[.8,-.12,-2.25],graphite:[.85,0,-2.65],'rear-shield':[1,0,-3.10],
+    'back-seal':[1,0,-3.60],back:[1,0,-4.1],'camera-cover':[1,0,-4.1],
+    front:[-.35,.45,1.1],faceid:[-.45,.45,1.65],'top-speaker':[-.25,.45,2.2],antenna:[.35,.45,0],
+    speakers:[-.25,-.38,-.6],taptic:[.20,-.38,-1.45],usb:[0,-.48,-1.8],microphone:[.38,-.48,-2.2],
+    flex:[-.2,-.10,-1.1],cowlings:[-.55,.20,.40],fasteners:[0,-.28,.55]
+  };
+  for(const [id,g]of parts){g.userData.offset.set(...layout[id]);}
   for(const g of parts.values())g.traverse(o=>{if(o.isMesh)o.userData.part=g.name;});
   // Static sub-meshes with the same material are batched per selectable part.
   // Main components remain independent groups with their own raycast identity.
   let sourceMeshes=0;
   for(const g of parts.values()){
+    if(g.userData.unbatched){sourceMeshes+=g.children.length;continue;}
     const batches=new Map();
     for(const o of [...g.children]){
       if(!o.isMesh)continue;sourceMeshes++;o.updateMatrix();
@@ -225,8 +299,9 @@ export function createPhone(T) {
 export function setExplosion(parts,progress){
   const p=Math.max(0,Math.min(1,progress));
   for(const g of parts.values()){
-    const t=Math.max(0,Math.min(1,(p-g.userData.stage)/(1-g.userData.stage)));
+    const t=Math.max(0,Math.min(1,(p-g.userData.stage)/.60));
     const eased=t*t*(3-2*t);
     g.position.copy(g.userData.base).addScaledVector(g.userData.offset,eased);
+    for(const m of g.userData.localMotions||[])m.object.position.copy(m.base).addScaledVector(m.offset,eased);
   }
 }

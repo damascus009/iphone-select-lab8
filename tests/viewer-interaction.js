@@ -11,7 +11,7 @@ if(mode==='no-webgl'){
   window.matchMedia=query=>query==='(prefers-reduced-motion: reduce)'?Object.assign(new EventTarget(),{matches:true,media:query}):original.call(window,query);
 }
 try{
-  await import('../viewer.js?v=refine-5');
+  await import('../viewer.js?v=studio-2');
   document.querySelector('#viewer-load').click();
   if(mode==='no-webgl'){
     await until(()=>document.querySelector('#viewer-status').textContent.includes('Не вдалося'));
@@ -27,6 +27,18 @@ try{
     document.querySelector('[data-view="side"]').click();await until(()=>host.dataset.angle==='90');check(true,'side view exactly 90 degrees');
     host.dispatchEvent(new KeyboardEvent('keydown',{key:'+',bubbles:true}));await until(()=>host.dataset.zoom==='1.10');check(true,'keyboard zoom');
     document.querySelector('[data-view="reset"]').click();await until(()=>host.dataset.zoom==='1.00');check(document.querySelector('#component-panel').hidden,'reset clears selection');
+    // Synthetic touch events exercise gesture arithmetic, not physical hardware.
+    const canvas=host.querySelector('canvas');
+    const capture=canvas.setPointerCapture,release=canvas.releasePointerCapture,has=canvas.hasPointerCapture;
+    canvas.setPointerCapture=()=>{};canvas.releasePointerCapture=()=>{};canvas.hasPointerCapture=()=>false;
+    const touch=(type,id,x,y,primary=true)=>canvas.dispatchEvent(new PointerEvent(type,{pointerId:id,pointerType:'touch',isPrimary:primary,button:0,clientX:x,clientY:y,bubbles:true}));
+    const angle=host.dataset.angle;
+    touch('pointerdown',11,100,100);touch('pointermove',11,180,110);touch('pointerup',11,180,110);
+    await until(()=>host.dataset.angle!==angle);check(true,'touch drag rotates');
+    touch('pointerdown',11,100,100);touch('pointerdown',12,200,100,false);touch('pointermove',12,230,100,false);
+    await until(()=>host.dataset.zoom==='1.30');touch('pointerup',12,230,100,false);touch('pointerup',11,100,100);check(true,'two-finger pinch zoom');
+    touch('pointerdown',11,100,100);touch('pointercancel',11,100,100);check(!host.classList.contains('dragging'),'touch cancellation clears drag');
+    canvas.setPointerCapture=capture;canvas.releasePointerCapture=release;canvas.hasPointerCapture=has;
     // Synthetic context-loss event verifies the UI/resource recovery path only.
     host.querySelector('canvas').dispatchEvent(new Event('webglcontextlost',{cancelable:true}));
     check(host.querySelectorAll('canvas').length===0&&!document.querySelector('#viewer-load').hidden,'context loss cleanup');
