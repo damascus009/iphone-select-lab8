@@ -72,7 +72,7 @@ summary::-webkit-details-marker {
 /* A fixed stage prevents layout shifts; render only when the view changes. */
 .phone-viewer { position:relative; height:540px; background:radial-gradient(ellipse at 50% 55%,#37202a 0%,#141014 45%,#080808 80%); overflow:hidden; }
 .phone-viewer:focus-visible { outline:2px solid var(--color-accent); outline-offset:4px; }
-.phone-viewer canvas { display:block; width:100%; height:100%; cursor:grab; touch-action:pan-y; }
+.phone-viewer canvas { display:block; width:100%; height:100%; cursor:grab; touch-action:none; }
 .phone-viewer.dragging canvas { cursor:grabbing; }
 .phone-viewer img { width:100%; height:100%; object-fit:fill; object-position:center; }
 .phone-viewer [hidden] { display:none; }
@@ -100,3 +100,5 @@ summary::-webkit-details-marker {
 .component-panel #component-specs { color:#bcb4c1; margin-top:8px; }
 .component-eyebrow { font-size:10px; letter-spacing:.16em; color:#e49fb7; padding-right:35px; }
 .component-panel button { position:absolute; right:12px; top:12px; width:44px; height:44px; font-size:25px; }
+
+.viewer-source { display:inline-block; margin-top:14px; color:#dbb9c5; text-decoration:underline; font-size:13px; }
