@@ -151,3 +151,5 @@ npm run build:css
 ### Оптимізація завантаження
 
 `npm run build:css` генерує Tailwind і об'єднує `fonts.css`, `tailwind.css`, `custom-styles.css` у `site-v1.css`. Редагуйте вихідні стилі, після змін перебудовуйте bundle. Локальні WOFF2 не потребують Google Fonts. `python3 scripts/optimize-images.py` (Pillow) відновлює адаптивні WebP з оригіналів. Перевірка ресурсів: `tests/performance.html` через локальний HTTP-сервер. Результати й межі перевірки: `PERFORMANCE.md`.
+
+
