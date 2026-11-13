@@ -153,3 +153,19 @@ npm run build:css
 `npm run build:css` генерує Tailwind і об'єднує `fonts.css`, `tailwind.css`, `custom-styles.css` у `site-v1.css`. Редагуйте вихідні стилі, після змін перебудовуйте bundle. Локальні WOFF2 не потребують Google Fonts. `python3 scripts/optimize-images.py` (Pillow) відновлює адаптивні WebP з оригіналів. Перевірка ресурсів: `tests/performance.html` через локальний HTTP-сервер. Результати й межі перевірки: `PERFORMANCE.md`.
 
 
+
+## Лабораторна №9 — форма зворотного зв’язку
+
+Секція `#feedback`: ім’я, email, телефон, повідомлення, згода. HTML/Tailwind і Vanilla JS; залежності для роботи готового сайту не потрібні. Форма не надсилає даних та не використовує localStorage. Кнопка без JavaScript вимкнена. Після успіху відкривається `<dialog>`; закриття очищає поля й повертає фокус.
+
+- `assets/js/validation-rules.mjs`: окремі чисті валідатори, 2 RegEx.
+- `assets/js/validation.js`: blur/input/change/submit, повідомлення, ARIA, діалог.
+- `assets/css/feedback.css`: стани, спеціальні стилі діалогу.
+- Правила: ім’я 2–80 символів; email — спрощений формат до 254; телефон строго +380 та 9 цифр без нормалізації; повідомлення 10–2000 символів; згода обов’язкова. Довжина імені/повідомлення рахується Unicode-кодовими точками після trim. Цифри/спецсимволи не заборонені поза цими правилами.
+
+Перевірки: `node tests/validation-rules.mjs` (36 випадків), `python3 tests/check-feedback.py` (потрібен lxml). Браузерні сценарії та скриншоти збережено окремо в матеріалах звіту.
+
+Локально: `python3 -m http.server 8099`, відкрити http://localhost:8099/#feedback.
+Стилі: `pnpm install --frozen-lockfile`, `pnpm run build:css`. Публікується вже зібраний статичний сайт.
+
+Vercel: Framework Other; Root Directory `./`; Output Directory `.`; Build Command порожня; Install Command порожня. `vercel.json` містить статичні налаштування. Підключення GitHub має використовувати цей самий репозиторій. Не зберігайте ключі або токени в коді.

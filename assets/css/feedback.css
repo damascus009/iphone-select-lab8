@@ -1,0 +1,21 @@
+/* Special states complement the locally compiled Tailwind layout utilities. */
+.feedback-layout { display:grid; gap:2.5rem; align-items:start; }
+@media(min-width:1024px) { .feedback-layout { grid-template-columns:.85fr 1.15fr; } }
+.feedback-control { min-width:0; max-width:100%; border-color:#ffffff40; }
+textarea.feedback-control { resize:vertical; min-height:8rem; }
+.feedback-control:focus-visible { outline:2px solid #e18ca5; outline-offset:3px; }
+.feedback-control[data-state="error"], .border-red-500 { border-color:#f87171; }
+.feedback-control[data-state="success"], .border-green-500 { border-color:#4ade80; }
+.feedback-message { min-height:1.4em; margin-top:.4rem; font-size:.8rem; line-height:1.5; color:#fca5a5; overflow-wrap:anywhere; }
+[data-state="success"] ~ .feedback-message { color:#86efac; }
+.feedback-agreement { display:flex; gap:.75rem; align-items:flex-start; padding:.6rem 0; min-height:44px; font-size:.875rem; line-height:1.6; cursor:pointer; }
+.feedback-agreement input { width:22px; height:22px; flex-shrink:0; accent-color:#c95c7c; margin-top:2px; }
+.feedback-agreement input:focus-visible { outline:2px solid #e18ca5; outline-offset:4px; }
+.feedback-agreement:has([data-state="error"]) { color:#fca5a5; }
+.feedback-agreement:has([data-state="success"]) + .feedback-message { color:#86efac; }
+.feedback-summary { color:#fca5a5; font-size:.875rem; min-height:1.5em; }
+.feedback-submit:disabled { opacity:.5; cursor:not-allowed; }
+.feedback-dialog { position:fixed; inset:0; margin:auto; width:calc(100% - 2rem); max-width:30rem; max-height:calc(100dvh - 2rem); overflow:auto; padding:2rem; border:1px solid #ffffff30; border-radius:1.5rem; background:#181719; color:#fff; }
+.feedback-dialog::backdrop { background:rgb(0 0 0 / .8); }
+.feedback-success-icon { color:#86efac; font-size:2rem; }
+#privacy summary:focus-visible { outline:2px solid #e18ca5; outline-offset:4px; }
