@@ -11,6 +11,8 @@
     <link rel="preload" as="image" href="assets/images/hero-1672-v1.webp" media="(min-width: 768px)" fetchpriority="high">
     <link rel="preload" as="font" href="assets/fonts/manrope-uk-latin-v1.woff2" type="font/woff2" crossorigin>
     <link rel="preload" as="font" href="assets/fonts/inter-uk-latin-v1.woff2" type="font/woff2" crossorigin>
+    <!-- Resolve Three.js before any module (including the feedback form) loads. -->
+    <script type="importmap">{"imports":{"three":"./vendor/three/three.module.js"}}</script>
     <link rel="stylesheet" href="site-v1.css">
     <link rel="stylesheet" href="assets/css/feedback.css">
   </head>
@@ -226,7 +228,6 @@
     <a href="#top" aria-label="Повернутися на початок сторінки" class="fixed bottom-5 right-5 z-40 grid h-12 w-12 place-items-center rounded-full border border-white/20 bg-[color:var(--color-card)]/95 text-lg shadow-xl transition hover:-translate-y-1 hover:border-[color:var(--color-accent)] hover:text-[color:var(--color-accent)] focus-visible:outline-2 focus-visible:outline-[color:var(--color-accent)]">↑</a>
 
     <script type="module" src="assets/js/validation.js"></script>
-    <script type="importmap">{"imports":{"three":"./vendor/three/three.module.js"}}</script>
     <!-- МЕДІА 360°: viewer.js завантажує Three.js і компонентну модель лише за запитом. -->
     <script type="module" src="viewer.js?v=studio-2"></script>
     <script>
