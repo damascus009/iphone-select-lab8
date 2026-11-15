@@ -1,0 +1,11 @@
+PASS bundle and page stylesheets
+PASS no Google Fonts network chain
+PASS 3D modules deferred until user action
+PASS exactly one responsive hero request
+PASS hero under 30 KB: 23970
+PASS local Ukrainian font Inter
+PASS local Ukrainian font Manrope
+PASS no horizontal overflow
+Loaded hero: hero-1672-v1.webp
+Image candidates: 
+ALL CHECKS PASSED

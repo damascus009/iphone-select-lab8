@@ -1,0 +1,3 @@
+PASS retry available without WebGL
+PASS no abandoned canvas after error
+ALL CHECKS PASSED

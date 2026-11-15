@@ -1,8 +1,10 @@
 from pathlib import Path
 from lxml import etree as E
 import json
-b=Path(__file__).resolve().parents[1];r=E.HTML((b/'index.html').read_text());ids=r.xpath('//@id');form=r.xpath('//form[@id="feedbackForm"]')[0]
-scripts=r.xpath('//script'); maps=[e for e in scripts if e.get('type')=='importmap']; modules=[e for e in scripts if e.get('type')=='module']
+b=Path(__file__).resolve().parents[1];r=E.HTML((b/'contacts.html').read_text());ids=r.xpath('//@id');form=r.xpath('//form[@id="feedbackForm"]')[0]
+# The form and 3D viewer now live on separate pages; retain both regressions.
+viewer=E.HTML((b/'viewer.html').read_text())
+scripts=viewer.xpath('//script'); maps=[e for e in scripts if e.get('type')=='importmap']; modules=[e for e in scripts if e.get('type')=='module']
 map_first=bool(len(maps)==1 and all(scripts.index(maps[0])<scripts.index(m) for m in modules))
 three_path=json.loads(maps[0].text or '{}').get('imports',{}).get('three','') if len(maps)==1 else ''
 three_local=bool(three_path.startswith('./vendor/three/') and (b/three_path).is_file())

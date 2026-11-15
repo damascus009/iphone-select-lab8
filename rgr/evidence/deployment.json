@@ -1,0 +1,9 @@
+{
+  "project": "iphone-select-rgr",
+  "deployment": "dpl_3CuDPR3Fe4GCEDbWQ2jKrzzhzMbe",
+  "url": "https://iphone-select-rgr.vercel.app/",
+  "branch": "rgr/development",
+  "method": "Vercel source-files API, manual deployment; no Git auto deployment",
+  "lab9": "https://iphone-select-lab9.vercel.app/",
+  "date": "2026-11-15"
+}

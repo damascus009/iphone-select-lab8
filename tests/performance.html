@@ -8,7 +8,7 @@ frame.addEventListener('load',async()=>{
  try{
   const doc=frame.contentDocument,win=frame.contentWindow;await doc.fonts.ready;
   const resources=win.performance.getEntriesByType('resource');
-  check(doc.querySelectorAll('link[rel=stylesheet]').length===1,'one bundled stylesheet');
+  check(doc.querySelectorAll('link[rel=stylesheet]').length===2,'bundle and page stylesheets');
   check(!resources.some(r=>/fonts\.googleapis|fonts\.gstatic/.test(r.name)),'no Google Fonts network chain');
   check(!resources.some(r=>/three\.(module|core)|viewer-model/.test(r.name)),'3D modules deferred until user action');
   const hero=resources.filter(r=>/hero-(960|1672)-v1\.webp/.test(r.name));

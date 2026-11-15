@@ -1,0 +1,122 @@
+[
+  {
+    "page": "index",
+    "mode": "mobile",
+    "date": "2026-11-15T16:45:32.189Z",
+    "url": "https://iphone-select-rgr.vercel.app/index.html",
+    "scores": {
+      "performance": 98,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "page": "index",
+    "mode": "desktop",
+    "date": "2026-11-15T16:45:45.414Z",
+    "url": "https://iphone-select-rgr.vercel.app/index.html",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "page": "catalog",
+    "mode": "mobile",
+    "date": "2026-11-15T16:45:57.988Z",
+    "url": "https://iphone-select-rgr.vercel.app/catalog.html",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "page": "catalog",
+    "mode": "desktop",
+    "date": "2026-11-15T16:46:13.171Z",
+    "url": "https://iphone-select-rgr.vercel.app/catalog.html",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "page": "about",
+    "mode": "mobile",
+    "date": "2026-11-15T16:46:27.478Z",
+    "url": "https://iphone-select-rgr.vercel.app/about.html",
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "page": "about",
+    "mode": "desktop",
+    "date": "2026-11-15T16:46:40.022Z",
+    "url": "https://iphone-select-rgr.vercel.app/about.html",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "page": "contacts",
+    "mode": "mobile",
+    "date": "2026-11-15T16:46:52.337Z",
+    "url": "https://iphone-select-rgr.vercel.app/contacts.html",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "page": "contacts",
+    "mode": "desktop",
+    "date": "2026-11-15T16:47:06.211Z",
+    "url": "https://iphone-select-rgr.vercel.app/contacts.html",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "page": "viewer",
+    "mode": "mobile",
+    "date": "2026-11-15T16:47:20.536Z",
+    "url": "https://iphone-select-rgr.vercel.app/viewer.html",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  },
+  {
+    "page": "viewer",
+    "mode": "desktop",
+    "date": "2026-11-15T16:47:33.753Z",
+    "url": "https://iphone-select-rgr.vercel.app/viewer.html",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    }
+  }
+]

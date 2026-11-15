@@ -1,0 +1,5 @@
+PASS index.html links, resources, IDs, h1, navigation, module isolation
+PASS catalog.html links, resources, IDs, h1, navigation, module isolation
+PASS about.html links, resources, IDs, h1, navigation, module isolation
+PASS contacts.html links, resources, IDs, h1, navigation, module isolation
+PASS viewer.html links, resources, IDs, h1, navigation, module isolation

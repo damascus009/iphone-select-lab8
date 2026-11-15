@@ -1,0 +1,9 @@
+
+> iphone-select-lab7@1.0.0 test
+> node tests/validation-rules.mjs
+
+{
+  "total": 36,
+  "passed": 36,
+  "failed": []
+}

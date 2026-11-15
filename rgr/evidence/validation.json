@@ -1,0 +1,290 @@
+[
+  {
+    "field": "username",
+    "input": "",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть ім’я: щонайменше 2 символи.",
+    "status": "PASS"
+  },
+  {
+    "field": "username",
+    "input": "А",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть ім’я: щонайменше 2 символи.",
+    "status": "PASS"
+  },
+  {
+    "field": "username",
+    "input": "  ",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть ім’я: щонайменше 2 символи.",
+    "status": "PASS"
+  },
+  {
+    "field": "username",
+    "input": "Іван",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "username",
+    "input": " Anna ",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "username",
+    "input": "😀",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть ім’я: щонайменше 2 символи.",
+    "status": "PASS"
+  },
+  {
+    "field": "username",
+    "input": "12",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "username",
+    "input": "ІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІІ",
+    "expected": false,
+    "actual": false,
+    "error": "Ім’я має містити не більше 80 символів.",
+    "status": "PASS"
+  },
+  {
+    "field": "email",
+    "input": "test@example.com",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "email",
+    "input": " user+tag@example.co.uk ",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "email",
+    "input": "wrong-email",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть email у форматі name@example.com.",
+    "status": "PASS"
+  },
+  {
+    "field": "email",
+    "input": "a@@b.com",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть email у форматі name@example.com.",
+    "status": "PASS"
+  },
+  {
+    "field": "email",
+    "input": "a@b..com",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть email у форматі name@example.com.",
+    "status": "PASS"
+  },
+  {
+    "field": "email",
+    "input": "a b@c.com",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть email у форматі name@example.com.",
+    "status": "PASS"
+  },
+  {
+    "field": "email",
+    "input": "a@b",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть email у форматі name@example.com.",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "+380501234567",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "+380671112233",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "0501234567",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть +380 і рівно 9 цифр без пробілів, дужок та дефісів.",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "+38050123456",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть +380 і рівно 9 цифр без пробілів, дужок та дефісів.",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "+3805012345678",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть +380 і рівно 9 цифр без пробілів, дужок та дефісів.",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "+380abc123456",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть +380 і рівно 9 цифр без пробілів, дужок та дефісів.",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "+380 50 123 45 67",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть +380 і рівно 9 цифр без пробілів, дужок та дефісів.",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "+380(50)1234567",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть +380 і рівно 9 цифр без пробілів, дужок та дефісів.",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "+380",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть +380 і рівно 9 цифр без пробілів, дужок та дефісів.",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": " +380501234567",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть +380 і рівно 9 цифр без пробілів, дужок та дефісів.",
+    "status": "PASS"
+  },
+  {
+    "field": "phone",
+    "input": "+380501234567\n",
+    "expected": false,
+    "actual": false,
+    "error": "Введіть +380 і рівно 9 цифр без пробілів, дужок та дефісів.",
+    "status": "PASS"
+  },
+  {
+    "field": "message",
+    "input": "123456789",
+    "expected": false,
+    "actual": false,
+    "error": "Напишіть щонайменше 10 символів.",
+    "status": "PASS"
+  },
+  {
+    "field": "message",
+    "input": "1234567890",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "message",
+    "input": "          ",
+    "expected": false,
+    "actual": false,
+    "error": "Напишіть щонайменше 10 символів.",
+    "status": "PASS"
+  },
+  {
+    "field": "message",
+    "input": "Тестове повідомлення",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "message",
+    "input": "<script>alert(1)</script>",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "message",
+    "input": "😀😀😀😀😀😀😀😀😀😀",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "message",
+    "input": "xxxxxxxxxxxx… (2000 символів)",
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  },
+  {
+    "field": "message",
+    "input": "xxxxxxxxxxxx… (2001 символів)",
+    "expected": false,
+    "actual": false,
+    "error": "Повідомлення має містити не більше 2000 символів.",
+    "status": "PASS"
+  },
+  {
+    "field": "agreement",
+    "input": false,
+    "expected": false,
+    "actual": false,
+    "error": "Підтвердьте ознайомлення з політикою конфіденційності.",
+    "status": "PASS"
+  },
+  {
+    "field": "agreement",
+    "input": true,
+    "expected": true,
+    "actual": true,
+    "error": "",
+    "status": "PASS"
+  }
+]

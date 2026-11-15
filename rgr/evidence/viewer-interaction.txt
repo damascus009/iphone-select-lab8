@@ -1,0 +1,47 @@
+PASS single renderer after loading
+PASS duplicate load ignored
+PASS reduced-motion explosion completes immediately
+PASS selection display
+PASS selection battery
+PASS selection vapor
+PASS selection board
+PASS selection processor
+PASS selection shields
+PASS selection rear
+PASS selection camera-cover
+PASS selection front
+PASS selection faceid
+PASS selection chassis
+PASS selection back
+PASS selection speakers
+PASS selection top-speaker
+PASS selection taptic
+PASS selection usb
+PASS selection microphone
+PASS selection coil
+PASS selection antenna
+PASS selection flex
+PASS selection cowlings
+PASS selection fasteners
+PASS selection display-seal
+PASS selection back-seal
+PASS selection oled
+PASS selection display-shield
+PASS selection rear-shield
+PASS selection graphite
+PASS selection rear-wide
+PASS selection rear-tele
+PASS selection optics
+PASS selection optics-mid
+PASS selection optics-inner
+PASS selection brackets
+PASS reduced-motion assembly
+PASS side view exactly 90 degrees
+PASS keyboard zoom
+PASS reset clears selection
+PASS touch drag rotates
+PASS two-finger pinch zoom
+PASS touch cancellation clears drag
+PASS context loss cleanup
+PASS context loss retry
+ALL CHECKS PASSED

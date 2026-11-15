@@ -74,7 +74,7 @@ summary::-webkit-details-marker {
 .phone-viewer:focus-visible { outline:2px solid var(--color-accent); outline-offset:4px; }
 .phone-viewer canvas { display:block; width:100%; height:100%; cursor:grab; touch-action:none; }
 .phone-viewer.dragging canvas { cursor:grabbing; }
-.phone-viewer img { width:100%; height:100%; object-fit:fill; object-position:center; }
+.phone-viewer img { width:100%; height:100%; object-fit:contain; object-position:center; }
 .phone-viewer [hidden] { display:none; }
 .viewer-start { position:absolute; left:50%; bottom:32px; transform:translateX(-50%); border:1px solid #c95c7c; border-radius:999px; padding:14px 24px; background:#7a1832; font-weight:700; white-space:nowrap; }
 .viewer-toolbar { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:20px; }

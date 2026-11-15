@@ -1,0 +1,15 @@
+{
+  "importmap_before_all_modules": true,
+  "importmap_in_head": true,
+  "three_module_exists": true,
+  "unique_ids": true,
+  "one_h1": true,
+  "fields": {
+    "username": true,
+    "email": true,
+    "phone": true,
+    "message": true,
+    "agreement": true
+  },
+  "missing_local": []
+}
