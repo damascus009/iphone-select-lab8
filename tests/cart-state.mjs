@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {cleanCart,changeQuantity,receipt} from '../assets/js/cart-state.mjs';
+assert.deepEqual(cleanCart({evil:1,'iphone-18-pro':-1,'iphone-18-pro-max':100}),{'iphone-18-pro-max':9});
+for(const value of [null,[],42,'<script>'])assert.deepEqual(cleanCart(value),{});
+const first=changeQuantity({},'iphone-18-pro',2);
+assert.deepEqual(changeQuantity(first,'iphone-18-pro',0),{});
+assert.deepEqual(first,{'iphone-18-pro':2});
+assert.deepEqual(changeQuantity(first,'__proto__',1),first);
+assert.deepEqual(changeQuantity(first,'iphone-18-pro',1.2),first);
+assert.equal(receipt({}),'');assert.match(receipt(first),/iPhone 18 Pro × 2/);assert.match(receipt(first),/нікуди не надсилається/);
+console.log('Cart tests passed: invalid storage, quantities, removal, immutable updates, educational receipt.');

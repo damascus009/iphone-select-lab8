@@ -1,0 +1,52 @@
+name: RGR checks and deployment
+on:
+  push:
+    branches: [rgr/development]
+  pull_request:
+    branches: [rgr/development]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rgr-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install beautifulsoup4==4.14.3
+      - run: node tests/validation-rules.mjs
+      - run: node tests/catalog-data.mjs
+      - run: node tests/theme.mjs
+      - run: node tests/cart-state.mjs
+      - run: python tests/pages-structure.py
+      - run: python tests/check-feedback.py
+  deploy:
+    needs: test
+    if: vars.RGR_AUTODEPLOY == 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/rgr/development'
+    runs-on: ubuntu-latest
+    environment: rgr-production
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '22'
+      - name: Require deployment credentials
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: test -n "$VERCEL_TOKEN" || { echo 'Configure VERCEL_TOKEN in rgr-production environment'; exit 1; }
+      - name: Package public runtime files only
+        run: python3 scripts/package-deployment.py
+      - name: Deploy RGR only
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_QzR0ocwEuS92nutjQceBeW8F
+          VERCEL_PROJECT_ID: prj_bpIskhm8DcUsVBu2lxNSNzQefxNS
+        run: npx --yes vercel@65.16.0 deploy .deploy-rgr --prod --yes

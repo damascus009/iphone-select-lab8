@@ -13,3 +13,21 @@
 .gallery-controls button:disabled{opacity:.45}#product-gallery:focus-visible,.gallery-controls button:focus-visible{outline:2px solid var(--color-accent);outline-offset:4px}
 @media(max-width:639px){.rgr-intro{padding:2rem 1rem}#product-gallery:not(.swiper-initialized) .swiper-wrapper{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){#product-gallery .swiper-wrapper{transition-duration:0ms!important}}
+/* The photographic hero stays dark in both themes to preserve text contrast. */
+:root{--color-text:#fff}
+body#top{color:var(--color-text)}
+:root[data-theme="light"]{--color-ink:#faf7f8;--color-panel:#fff;--color-card:#fff;--color-muted:#59515a;--color-soft:#655d65;--color-accent:#8b2545;--color-text:#241b22}
+[data-theme="light"] [class*="border-white/"]{border-color:#dacdd3}
+[data-theme="light"] [class*="bg-white/"]{background-color:#eee7eb}
+[data-theme="light"] [class*="hover:text-white"]:hover{color:var(--color-accent)}
+[data-theme="light"] [class*="bg-[color:var(--color-brand)]"]{color:white}
+[data-theme="light"] .hero-art{color:white;--color-muted:#c8c0c5;--color-accent:#df8ca6}
+[data-theme="light"] .hero-art [class*="border-white/"]{border-color:#ffffff50}
+.theme-toggle{min-width:44px;min-height:44px;border:1px solid var(--color-accent);border-radius:50%;flex-shrink:0;font-size:1.25rem;margin-left:auto}
+.theme-toggle:focus-visible{outline:3px solid var(--color-accent);outline-offset:3px}
+.catalog-status{color:var(--color-muted);margin:1rem 0;font-size:.875rem}
+.account-form{display:grid;gap:.75rem;max-width:30rem}.account-form input{min-height:44px;border:1px solid var(--color-soft);border-radius:.75rem;padding:.75rem;background:var(--color-panel);color:var(--color-text)}
+.account-form button,#account-logout{min-height:44px;padding:.65rem 1rem;border-radius:99px;border:1px solid var(--color-accent);margin:.5rem 0}
+.account-form button:disabled{opacity:.5}.account-form[hidden]{display:none}
+
+#cart-lines{list-style:none;padding:0}#cart-lines li{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin:1rem 0}#cart-lines span{margin-right:auto}#cart button{min-height:44px;padding:.5rem 1rem;border:1px solid var(--color-muted);border-radius:1rem}#cart button:disabled{opacity:.5;cursor:not-allowed}#cart-receipt{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;padding:1rem;border:1px solid var(--color-muted);border-radius:1rem}

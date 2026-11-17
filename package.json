@@ -4,10 +4,16 @@
   "version": "1.0.0",
   "scripts": {
     "build:css": "tailwindcss -i ./tailwind-input.css -o ./tailwind.css --minify && node scripts/build-styles.mjs",
-    "test": "node tests/validation-rules.mjs"
+    "test": "node tests/validation-rules.mjs && node tests/catalog-data.mjs && node tests/theme.mjs && node tests/cart-state.mjs && node tests/account-http.cjs"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.3",
     "tailwindcss": "4.3.3"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.0",
+    "@vercel/analytics": "^2.0.1",
+    "cookie": "^2.0.2"
   }
 }

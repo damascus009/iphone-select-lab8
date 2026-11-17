@@ -1,16 +1,4 @@
-      const cartCount = document.querySelector('#cart-count');
-      let cartItems = 0;
-      document.querySelectorAll('[data-add-cart]').forEach((button) => {
-        button.addEventListener('click', () => {
-          cartItems += 1;
-          if (cartCount) cartCount.textContent = cartItems;
-          document.querySelectorAll('[data-cart-count]').forEach((badge) => badge.textContent = cartItems);
-          const original = button.textContent;
-          button.textContent = 'Додано ✓';
-          window.setTimeout(() => { button.textContent = original; }, 1100);
-        });
-      });
-
+import './cart.js';
       const cards = [...document.querySelectorAll('.model-card')];
       const emptyMessage = document.querySelector('#search-empty');
       const searchFields = [document.querySelector('#model-search'), document.querySelector('#mobile-model-search')].filter(Boolean);
@@ -53,3 +41,17 @@
         document.querySelector('#trade-result').textContent = `Орієнтовна демо-оцінка: ${formatPrice(Math.round(baseValue * conditionValue))}`;
       });
 
+
+// Keep the initial cards usable when offline or when JSON is invalid.
+import { loadCatalog } from './catalog-data.mjs';
+loadCatalog().then(products => {
+  for (const product of products) {
+    const card = document.querySelector(`[data-product-id="${product.id}"]`);
+    card.querySelector('h2').textContent = product.name;
+    card.dataset.model = product.name.toLocaleLowerCase('uk');
+    card.querySelectorAll('li').forEach((item, i) => { item.textContent = product.features[i]; });
+  }
+  document.querySelector('#catalog-status').textContent = 'Каталог оновлено.';
+}).catch(() => {
+  document.querySelector('#catalog-status').textContent = 'Не вдалося оновити каталог. Доступна збережена версія сторінки.';
+});
