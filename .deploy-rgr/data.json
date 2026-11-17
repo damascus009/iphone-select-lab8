@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source": "https://www.apple.com/iphone-18-pro/specs/",
+  "verifiedAt": "2026-11-16",
+  "products": [
+    {
+      "id": "iphone-18-pro",
+      "name": "iPhone 18 Pro",
+      "features": [
+        "Super Retina XDR 6,3″",
+        "A20 Pro",
+        "256 ГБ · 512 ГБ · 1 ТБ · 2 ТБ"
+      ],
+      "colors": [
+        "Black",
+        "Silver",
+        "Glacier",
+        "Burgundy"
+      ],
+      "storage": [
+        "256",
+        "512",
+        "1tb",
+        "2tb"
+      ],
+      "price": null
+    },
+    {
+      "id": "iphone-18-pro-max",
+      "name": "iPhone 18 Pro Max",
+      "features": [
+        "Super Retina XDR 6,9″",
+        "A20 Pro",
+        "256 ГБ · 512 ГБ · 1 ТБ · 2 ТБ"
+      ],
+      "colors": [
+        "Black",
+        "Silver",
+        "Glacier",
+        "Burgundy"
+      ],
+      "storage": [
+        "256",
+        "512",
+        "1tb",
+        "2tb"
+      ],
+      "price": null
+    }
+  ]
+}
