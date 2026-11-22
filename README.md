@@ -179,3 +179,13 @@ Vercel: Framework Other; Root Directory `./`; Output Directory `.`; Build Comman
 Перевірено в локальному браузері: запуск 360°, обертання, розбирання та збирання; відображення п’яти помилок порожньої форми та діалог після правильного заповнення. Усі 36 перевірок валідаторів пройдено. Окремий Firefox тут не запускався; додано перевірку порядку скриптів, який спричинив помилку на скриншоті.
 
 Робоча папка для VS Code: `lab7/site`. Перед вирівнюванням історії створено резервні гілки `backup/lab9-before-360-fix` та `backup/360-fix-local-history`; файли збережено. Запускайте сайт через HTTP (Live Server або локальний сервер), після оновлення перезавантажте сторінку без кешу.
+
+## Лабораторна №10 — медіакомпоненти
+
+До наявного лендингу додано секцію `#media-lab`: Swiper **11.2.10** з 6 слайдами, loop, autoplay 3500 мс, hover/focus pause, стрілками та пагінацією; Fancybox **5.0.36** з 3 зображеннями, альбомом `coffee-gallery`, fade та zoom; Typed.js **2.0.12** з трьома тематичними фразами в Hero. Усі три бібліотеки доставляє jsDelivr. Three.js залишається локальним, importmap розташована перед модулями.
+
+Матеріали — локальні активи iPhone Select, а не вигадані відгуки. Reduced motion вимикає автогортання й друк; є окремі кнопки зупинки. При відмові CDN залишаються сітка слайдів, прямі посилання на зображення та статичний текст. Логіка ізольована в `assets/js/media.js`, стилі — `assets/css/media.css`.
+
+Запуск: `python3 -m http.server 8100`; відкрити `http://localhost:8100/#media-lab`. Перевірки: `python3 tests/media-structure.py`, `python3 tests/check-feedback.py`, `node tests/validation-rules.mjs`; без CDN — `tests/media-offline.html`.
+
+Документація: https://github.com/nolimits4web/swiper/tree/v11.2.10 ; https://v5.fancyapps.com/fancybox/ ; https://github.com/mattboldt/typed.js/tree/v2.0.12 . Ліцензії сторонніх бібліотек визначаються відповідними проєктами; Fancybox v5 має окремі умови GPLv3/комерційного використання: https://v5.fancyapps.com/license/ .
