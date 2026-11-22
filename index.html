@@ -15,6 +15,10 @@
     <script type="importmap">{"imports":{"three":"./vendor/three/three.module.js"}}</script>
     <link rel="stylesheet" href="site-v1.css">
     <link rel="stylesheet" href="assets/css/feedback.css">
+    <!-- Lab 10: pinned Vanilla JS libraries delivered by jsDelivr. -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.2.10/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css">
+    <link rel="stylesheet" href="assets/css/media.css">
   </head>
   <body id="top" class="bg-[color:var(--color-ink)] font-[family-name:var(--font-body)] text-white antialiased selection:bg-[color:var(--color-brand)] selection:text-white">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-[color:var(--color-brand)] focus:px-4 focus:py-3 focus:text-white">Перейти до основного вмісту</a>
@@ -61,7 +65,7 @@
         <div class="mx-auto grid min-h-[590px] max-w-7xl items-center px-4 py-20 sm:px-6 lg:min-h-[650px] lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-24">
           <div class="relative z-10 max-w-2xl">
             <p class="mb-5 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-accent)]/30 bg-[color:var(--color-brand)]/20 px-4 py-2 text-xs font-bold tracking-[.18em] text-[color:var(--color-accent)]">ОБЕРИ IPHONE <span aria-hidden="true" class="h-1.5 w-1.5 rounded-full bg-[color:var(--color-accent)]"></span> ДЕМОПРОЄКТ</p>
-            <h1 id="hero-title" class="font-[family-name:var(--font-display)] text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">Твій наступний iPhone <span class="text-[color:var(--color-accent)]">починається з вибору</span></h1>
+            <h1 id="hero-title" class="font-[family-name:var(--font-display)] text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">Твій наступний iPhone <span class="text-[color:var(--color-accent)]">починається з вибору</span></h1><div class="media-typed"><span class="sr-only">Порівнюй моделі. Розглядай деталі. Обирай свій iPhone.</span><span id="media-typed" aria-hidden="true">Порівнюй моделі.</span><button id="typed-pause" type="button" hidden aria-label="Зупинити анімацію тексту" aria-pressed="false">Ⅱ</button></div>
             <p class="mt-6 max-w-xl text-base leading-7 text-[color:var(--color-muted)] sm:text-lg">Порівнюй моделі, налаштовуй колір і пам’ять, оцінюй свій старий смартфон. Знайди конфігурацію, яка пасує саме тобі.</p>
             <div class="mt-8 flex flex-col gap-3 sm:flex-row">
               <a href="#models" class="inline-flex min-h-12 items-center justify-center rounded-full bg-[color:var(--color-brand)] px-6 text-sm font-bold transition duration-200 hover:bg-[color:var(--color-brand-hover)] active:bg-[color:var(--color-brand-active)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]">Обрати модель</a>
@@ -213,6 +217,17 @@
       <dialog id="feedbackDialog" aria-labelledby="feedbackDialogTitle" aria-describedby="feedbackDialogText" class="feedback-dialog">
         <p class="feedback-success-icon" aria-hidden="true">✓</p><h2 id="feedbackDialogTitle" class="mt-4 font-[family-name:var(--font-display)] text-2xl font-bold">Перевірку пройдено</h2><p id="feedbackDialogText" class="mt-4 leading-7 text-[color:var(--color-muted)]">Форма успішно пройшла клієнтську валідацію. Це демонстрація успішного надсилання. Дані не надіслано на сервер.</p><button id="feedbackClose" type="button" class="feedback-submit mt-6 min-h-12 w-full rounded-full bg-[color:var(--color-brand)] px-6 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-accent)]">Закрити</button>
       </dialog>
+
+    <!-- Lab 10: existing local artwork; portfolio, not fabricated customer reviews. -->
+    <section id="media-lab" class="media-lab" aria-labelledby="media-title">
+      <div class="media-inner"><p class="media-eyebrow">ГАЛЕРЕЯ IPHONE SELECT</p><h2 id="media-title">Погляд на деталі</h2>
+      <p class="media-intro">Візуальні матеріали проєкту. Гортай добірку та відкривай зображення, щоб розглянути їх ближче.</p>
+      <div class="swiper media-swiper" role="region" aria-label="Добірка матеріалів iPhone Select" tabindex="0"><div class="swiper-wrapper"><article class="swiper-slide media-card"><img src="assets/images/iphone18-hero-1200-v1.webp" alt="Дизайн Burgundy — матеріал iPhone Select" width="800" height="500" loading="lazy" decoding="async"><div><h3>Дизайн Burgundy</h3><p>Колір і силует у темній палітрі.</p></div></article><article class="swiper-slide media-card"><img src="assets/images/iphone18-detail-748-v1.webp" alt="Деталі корпусу — матеріал iPhone Select" width="800" height="500" loading="lazy" decoding="async"><div><h3>Деталі корпусу</h3><p>Розглянь акценти зовнішнього вигляду.</p></div></article><article class="swiper-slide media-card"><img src="assets/images/viewer-poster-1672-v1.webp" alt="Інтерактивний огляд — матеріал iPhone Select" width="800" height="500" loading="lazy" decoding="async"><div><h3>Інтерактивний огляд</h3><p>Перейди до наявної моделі 360°.</p></div></article><article class="swiper-slide media-card"><img src="assets/images/hero-1672-v1.webp" alt="Твій вибір — матеріал iPhone Select" width="800" height="500" loading="lazy" decoding="async"><div><h3>Твій вибір</h3><p>Порівняй модель, пам’ять і колір.</p></div></article><article class="swiper-slide media-card"><img src="assets/images/hero_bg.webp" alt="Візуальна концепція — матеріал iPhone Select" width="800" height="500" loading="lazy" decoding="async"><div><h3>Візуальна концепція</h3><p>Графічний матеріал проєкту.</p></div></article><article class="swiper-slide media-card"><img src="assets/images/iPhone.png" alt="Знайомство з моделлю — матеріал iPhone Select" width="800" height="500" loading="lazy" decoding="async"><div><h3>Знайомство з моделлю</h3><p>Оглянь навчальну вітрину iPhone Select.</p></div></article></div></div>
+      <div class="media-controls" hidden><button id="media-prev" type="button" aria-label="Попередній слайд">←</button><div class="media-pagination"></div><button id="media-next" type="button" aria-label="Наступний слайд">→</button><button id="media-pause" type="button" aria-pressed="false">Зупинити автогортання</button></div>
+      <p id="media-status" class="media-status" role="status">Усі матеріали доступні нижче. Завантаження інтерактивних елементів…</p>
+      <h3 class="media-subtitle">Відкрий у повному розмірі</h3><div class="media-grid"><a href="assets/images/iphone18-hero-1200-v1.webp" data-fancybox="coffee-gallery" data-caption="Дизайн Burgundy — iPhone Select" aria-label="Відкрити зображення: Дизайн Burgundy"><img src="assets/images/iphone18-hero-1200-v1.webp" alt="Дизайн Burgundy" width="800" height="500" loading="lazy" decoding="async"><span>Дизайн Burgundy ↗</span></a><a href="assets/images/iphone18-detail-748-v1.webp" data-fancybox="coffee-gallery" data-caption="Деталі корпусу — iPhone Select" aria-label="Відкрити зображення: Деталі корпусу"><img src="assets/images/iphone18-detail-748-v1.webp" alt="Деталі корпусу" width="800" height="500" loading="lazy" decoding="async"><span>Деталі корпусу ↗</span></a><a href="assets/images/viewer-poster-1672-v1.webp" data-fancybox="coffee-gallery" data-caption="Інтерактивний огляд — iPhone Select" aria-label="Відкрити зображення: Інтерактивний огляд"><img src="assets/images/viewer-poster-1672-v1.webp" alt="Інтерактивний огляд" width="800" height="500" loading="lazy" decoding="async"><span>Інтерактивний огляд ↗</span></a></div>
+      <p id="lightbox-status" class="media-status">Посилання відкривають оригінали зображень.</p></div>
+    </section>
     </main>
 
     <footer class="bg-[color:var(--color-ink)]">
@@ -298,5 +313,9 @@
         event.currentTarget.reset();
       });
     </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/swiper@11.2.10/swiper-bundle.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js"></script>
+    <script defer src="assets/js/media.js"></script>
   </body>
 </html>
