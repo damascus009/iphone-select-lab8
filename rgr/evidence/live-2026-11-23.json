@@ -1,0 +1,56 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "bytes": 23724,
+    "cache": "public, max-age=0, must-revalidate"
+  },
+  {
+    "path": "/catalog.html",
+    "status": 200,
+    "bytes": 42121,
+    "cache": "public, max-age=0, must-revalidate"
+  },
+  {
+    "path": "/about.html",
+    "status": 200,
+    "bytes": 18657,
+    "cache": "public, max-age=0, must-revalidate"
+  },
+  {
+    "path": "/contacts.html",
+    "status": 200,
+    "bytes": 22405,
+    "cache": "public, max-age=0, must-revalidate"
+  },
+  {
+    "path": "/viewer.html",
+    "status": 200,
+    "bytes": 18184,
+    "cache": "public, max-age=0, must-revalidate"
+  },
+  {
+    "path": "/robots.txt",
+    "status": 200,
+    "bytes": 97,
+    "cache": "public, max-age=0, must-revalidate"
+  },
+  {
+    "path": "/sitemap.xml",
+    "status": 200,
+    "bytes": 466,
+    "cache": "public, max-age=0, must-revalidate"
+  },
+  {
+    "path": "/data.json",
+    "status": 200,
+    "bytes": 6087,
+    "cache": "public, max-age=0, must-revalidate"
+  },
+  {
+    "path": "/api/account",
+    "status": 200,
+    "bytes": 13,
+    "cache": "private, no-store"
+  }
+]

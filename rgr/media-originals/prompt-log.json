@@ -1,0 +1,31 @@
+{
+  "tool": "OpenAI image_gen.imagegen",
+  "date": "2026-11-22",
+  "purpose": "Original educational AI concepts; not official Apple product imagery.",
+  "images": [
+    {
+      "image": 1,
+      "prompt": "Use case: product-mockup. Create one original landscape 3:2 image for iPhone Select's educational AI concept gallery. Scene: a generic premium burgundy smartphone with no logo standing on a dark stone plinth, beside a thin curved brushed-metal arch. Deep muted burgundy, charcoal and warm silver palette. Soft large studio lights, matte metal, nuanced glass reflections, photorealistic editorial still life. Entire phone visible, generous negative space, no words, no watermark. This is a fictional smartphone concept, not a precise Apple product photograph. Save the generated image as a project asset if a file output is available."
+    },
+    {
+      "image": 2,
+      "prompt": "Use case: product-mockup. One original landscape 3:2 editorial still life for iPhone Select educational AI concept gallery. A generic burgundy smartphone lying face down diagonally beside a neatly coiled USB-C cable and a small silver charging puck on charcoal felt. Premium restrained studio photography, soft diffuse light, muted wine-red and warm silver palette, tactile matte materials. No logos, no typography, no watermark. Fictional accessories concept, not a verified product photograph. Distinct composition, all objects fully visible."
+    },
+    {
+      "image": 3,
+      "prompt": "Create an original landscape 3:2 editorial photograph-style AI concept for iPhone Select. A generic unbranded burgundy smartphone on a minimalist walnut work desk beside an open blank notebook, silver pen and ceramic coffee cup. Soft morning window lighting, muted wine-red, warm grey and charcoal palette, realistic matte materials, careful premium composition. No readable text, logos or watermarks. Fictional device, not an official Apple photograph."
+    },
+    {
+      "image": 4,
+      "prompt": "Original landscape 3:2 AI concept image for iPhone Select gallery. Generic unbranded burgundy smartphone propped on a charcoal travel pouch beside a small silver camera lens and folded neutral map with no labels, a softly blurred mountain landscape through a train window. Editorial premium photography style, restrained burgundy and silver accents, soft natural overcast light, realistic glass and matte metal. No text, logos or watermark. Fictional smartphone concept, not official product imagery."
+    },
+    {
+      "image": 5,
+      "prompt": "Original 3:2 landscape editorial AI concept photograph for iPhone Select. Generic unbranded burgundy smartphone with its dark glass screen facing up, silver over-ear headphones curved around it on charcoal acoustic felt. Minimal premium audio listening still life, soft broad studio lighting, subtle burgundy reflected light, realistic matte metal and fabric, generous breathing room. No screen interface, no lettering, logos or watermark. Fictional design, not official Apple imagery."
+    },
+    {
+      "image": 6,
+      "prompt": "Original landscape 3:2 premium editorial AI concept image for iPhone Select. Close-up still life of a generic unbranded burgundy smartphone edge lying across two rectangular material samples, brushed silver metal and deep wine-red matte glass, on a dark charcoal tabletop. Macro detail with elegant soft reflections, subtle grain, shallow depth of field while main device remains recognizable, muted sophisticated palette. No logos, words or watermark. Fictional industrial design concept, not a technical depiction of any real Apple model."
+    }
+  ]
+}
