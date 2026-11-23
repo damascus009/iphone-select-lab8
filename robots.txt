@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Sitemap: https://iphone-select-rgr.vercel.app/sitemap.xml
