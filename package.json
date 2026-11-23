@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "build:css": "tailwindcss -i ./tailwind-input.css -o ./tailwind.css --minify && node scripts/build-styles.mjs",
-    "test": "node tests/validation-rules.mjs && node tests/catalog-data.mjs && node tests/theme.mjs && node tests/cart-state.mjs && node tests/account-http.cjs"
+    "test": "node tests/validation-rules.mjs && node tests/catalog-data.mjs && node tests/theme.mjs && node tests/cart-state.mjs && node tests/account-http.cjs && node tests/trade-in.mjs"
   },
   "devDependencies": {
     "@tailwindcss/cli": "4.3.3",

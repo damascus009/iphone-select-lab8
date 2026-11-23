@@ -22,12 +22,18 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install beautifulsoup4==4.14.3 lxml
+      - run: npx --yes pnpm@10.28.0 install --frozen-lockfile
       - run: node tests/validation-rules.mjs
       - run: node tests/catalog-data.mjs
       - run: node tests/theme.mjs
+      - run: node tests/account-http.cjs
       - run: node tests/cart-state.mjs
+      - run: node tests/trade-in.mjs
+      - run: python scripts/generate-catalog.py --check
       - run: python tests/pages-structure.py
       - run: python tests/check-feedback.py
+      - run: python scripts/package-deployment.py
+      - run: node .deploy-rgr/scripts/build-public.cjs
   deploy:
     needs: test
     if: vars.RGR_AUTODEPLOY == 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/rgr/development'
