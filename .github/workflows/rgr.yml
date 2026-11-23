@@ -25,7 +25,10 @@ jobs:
       - run: node tests/validation-rules.mjs
       - run: node tests/catalog-data.mjs
       - run: node tests/theme.mjs
+      - run: node tests/account-http.cjs
       - run: node tests/cart-state.mjs
+      - run: node tests/trade-in.mjs
+      - run: python scripts/generate-catalog.py --check
       - run: python tests/pages-structure.py
       - run: python tests/check-feedback.py
   deploy:

@@ -18,7 +18,8 @@ function update(id,quantity){
  cart=changeQuantity(cart,id,quantity);result.hidden=true;render();
  try{localStorage.setItem(key,JSON.stringify(cart));status.textContent='Кошик збережено в цьому браузері.';}catch{status.textContent='Кошик доступний до закриття сторінки: сховище браузера недоступне.';}
 }
-document.querySelectorAll('[data-add-cart]').forEach(button=>button.addEventListener('click',()=>{const id=button.closest('[data-product-id]').dataset.productId;update(id,(cart[id]||0)+1);status.textContent=(cart[id]===9?'Досягнуто ліміт 9 шт.: ':'Додано: ')+PRODUCTS[id];}));
+export function addToCart(id){if(!Object.hasOwn(PRODUCTS,id))return;update(id,(cart[id]||0)+1);status.textContent=(cart[id]===9?'Досягнуто ліміт 9 шт.: ':'Додано: ')+PRODUCTS[id];}
+document.querySelectorAll('[data-add-cart]').forEach(button=>button.addEventListener('click',()=>addToCart(button.closest('[data-product-id]').dataset.productId)));
 checkout.addEventListener('click',()=>{result.textContent=receipt(cart);result.hidden=false;result.focus();});
 window.addEventListener('storage',event=>{if(event.key!==key)return;try{cart=cleanCart(JSON.parse(event.newValue));}catch{cart={};}result.hidden=true;render();});
 render();

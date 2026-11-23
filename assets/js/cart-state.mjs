@@ -1,4 +1,5 @@
-export const PRODUCTS = Object.freeze({'iphone-18-pro':'iPhone 18 Pro','iphone-18-pro-max':'iPhone 18 Pro Max'});
+import {catalog} from './catalog-snapshot.mjs';
+export const PRODUCTS = Object.freeze(Object.fromEntries(catalog.products.map(p=>[p.id,p.name])));
 export function cleanCart(value) {
  const result={};
  if(!value || typeof value!=='object' || Array.isArray(value))return result;

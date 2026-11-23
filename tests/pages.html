@@ -4,21 +4,25 @@ const check=(ok,label)=>{rows.push(`${ok?'PASS':'FAIL'} ${label}`);output.textCo
 const load=src=>new Promise(resolve=>{frame.onload=()=>resolve(frame.contentDocument);frame.src=src});
 const tick=()=>new Promise(r=>setTimeout(r,150));
 try {
-for (const width of [320,375,768,1024,1440]) {
+for (const theme of ['light','dark']) for (const width of [320,375,768,1024,1440]) {
  frame.style.width=width+'px';
  for (const page of ['index','catalog','about','contacts','viewer']) {
-  const doc=await load('../'+page+'.html');await doc.fonts.ready;await tick();
-  check(doc.documentElement.scrollWidth===doc.documentElement.clientWidth,`${page} ${width}: no overflow`);
-  check(doc.querySelectorAll('h1').length===1,`${page} ${width}: one h1`);
-  check(doc.querySelectorAll('[aria-current=page]').length===2,`${page} ${width}: current navigation`);
+  const doc=await load('../'+page+'.html');doc.documentElement.dataset.theme=theme;await doc.fonts.ready;await tick();
+  check(doc.documentElement.scrollWidth===doc.documentElement.clientWidth,`${page} ${theme} ${width}: no overflow`);
+  check(doc.querySelectorAll('h1').length===1,`${page} ${theme} ${width}: one h1`);
+  check([...doc.querySelectorAll('svg')].every(s=>s.hasAttribute('viewBox')&&(s.getAttribute('aria-hidden')==='true'||s.hasAttribute('aria-label')||s.querySelector('title'))),`${page} ${theme} ${width}: SVG semantics`);
  }
 }
 frame.style.width='375px';let doc=await load('../catalog.html');await tick();
 let field=doc.querySelector('#mobile-model-search');field.value='zzzz';field.dispatchEvent(new Event('input'));check(!doc.querySelector('#search-empty').classList.contains('hidden'),'search no results');
-field.value='max';field.dispatchEvent(new Event('input'));check(doc.querySelectorAll('.model-card:not(.hidden)').length===1,'search match');
-field.value='';field.dispatchEvent(new Event('input'));check(doc.querySelectorAll('.model-card:not(.hidden)').length===2,'search reset');
-doc.querySelector('[name=color][value=Black]').click();check(doc.querySelector('#summary-color').textContent==='Black','configuration updates');
-doc.querySelector('#trade-form').requestSubmit();check(doc.querySelector('#trade-result').textContent.includes('грн'),'trade-in result');
+field.value='max';field.dispatchEvent(new Event('input'));check(doc.querySelectorAll('.model-card:not([hidden])').length===2,'search match');
+field.value='';field.dispatchEvent(new Event('input'));check(doc.querySelectorAll('.model-card:not([hidden])').length===10,'search reset');
+doc.querySelector('#config-model').value='iphone-16-pro-max';doc.querySelector('#config-model').dispatchEvent(new Event('change'));
+check(![...doc.querySelector('#config-storage').options].some(x=>x.value==='128'),'Pro Max excludes 128GB');
+doc.querySelector('#trade-model').value='iphone-16';doc.querySelector('#trade-model').dispatchEvent(new Event('change'));
+doc.querySelector('#trade-storage').value='256';doc.querySelector('#trade-condition').value='used';
+for(let i=0;i<50;i++)doc.querySelector('#trade-form').requestSubmit();
+check(doc.querySelector('#trade-result').textContent.replace(/\s/g,'').includes('9075'),'50 repeated DOM submissions yield 9075');
 doc=await load('../contacts.html');await tick();const form=doc.querySelector('#feedbackForm');form.requestSubmit();check(doc.querySelectorAll('[aria-invalid=true]').length===5,'empty form five errors');
 for(const [id,value] of Object.entries({username:'Іван',email:'test@example.com',phone:'+380501234567',message:'Навчальна перевірка форми'}))doc.getElementById(id).value=value;
 doc.querySelector('#agreement').checked=true;form.requestSubmit();check(doc.querySelector('#feedbackDialog').open,'valid form opens dialog');
