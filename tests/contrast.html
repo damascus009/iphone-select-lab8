@@ -3,7 +3,7 @@ const frame=document.querySelector('iframe'),out=document.querySelector('#result
 const load=src=>new Promise(resolve=>{frame.onload=()=>resolve(frame.contentDocument);frame.src=src;});
 for(const page of ['index','catalog','about','contacts','viewer'])for(const theme of ['light','dark']){
  const doc=await load('../'+page+'.html');doc.documentElement.dataset.theme=theme;await doc.fonts.ready;await new Promise(r=>setTimeout(r,450));
- const script=doc.createElement('script');script.src='../tmp/axe.min.js';await new Promise((resolve,reject)=>{script.onload=resolve;script.onerror=reject;doc.head.append(script)});
+ const script=doc.createElement('script');script.src='https://cdn.jsdelivr.net/npm/axe-core@4.10.3/axe.min.js';await new Promise((resolve,reject)=>{script.onload=resolve;script.onerror=reject;doc.head.append(script)});
  if(page==='viewer'){doc.querySelector('#viewer-load').click();await new Promise(r=>setTimeout(r,1000));}
  if(page==='contacts'){doc.querySelector('#feedbackForm').requestSubmit();}
  const report=await frame.contentWindow.axe.run(doc,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}});
