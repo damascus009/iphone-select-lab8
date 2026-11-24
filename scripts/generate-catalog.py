@@ -18,6 +18,9 @@ if table:
  table.clear();table.append(BeautifulSoup('<caption>Моделі з офіційно перевіреними характеристиками Apple</caption><thead><tr><th scope="col">Модель</th><th scope="col">Екран OLED</th><th scope="col">Чип</th><th scope="col">Пам’ять</th></tr></thead><tbody>'+''.join(f'<tr data-compare-model="{p["id"]}"><th scope="row">{p["name"]}</th><td>{p["display"]}″</td><td>{p["chip"]}</td><td>{p["features"][2]}</td></tr>' for p in products)+'</tbody>','html.parser'))
 for select in s.select('#model-filter,#config-model,#trade-model'):
  select.clear();select.append(BeautifulSoup('<option value="">'+('Усі моделі' if select['id']=='model-filter' else 'Оберіть модель')+'</option>'+''.join(f'<option value="{p["id"]}">{p["name"]}</option>' for p in products),'html.parser'))
+suggestions=s.select_one('#model-options')
+if suggestions:
+ suggestions.clear();suggestions.append(BeautifulSoup('<option value="iPhone 18 Pro">Концепт проєкту</option>'+''.join(f'<option value="{esc(p["name"])}"></option>' for p in products),'html.parser'))
 outputs={root/'assets/js/catalog-snapshot.mjs':snapshot,root/'catalog.html':str(s)}
 if '--check' in sys.argv:
  for path,value in outputs.items():
