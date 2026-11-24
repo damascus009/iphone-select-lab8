@@ -3,21 +3,26 @@ import { catalog } from './catalog-snapshot.mjs';
 import { loadCatalog } from './catalog-data.mjs';
 import { estimateTradeIn } from './trade-in.mjs';
 const $=selector=>document.querySelector(selector), products=catalog.products;
-const fields=[$('#model-search'),$('#mobile-model-search')].filter(Boolean),filter=$('#model-filter');
+const search=$('#mobile-model-search');
 const storageLabel=n=>n===1024?'1 ТБ':`${n} ГБ`;
 function filterCards(){
- const query=(fields[0]?.value||'').trim().toLocaleLowerCase('uk');let count=0;
- for(const p of products){const visible=(!filter.value||p.id===filter.value)&&p.name.toLocaleLowerCase('uk').includes(query);
+ const query=search.value.trim().toLocaleLowerCase('uk');let count=0;
+ const conceptVisible='iphone 18 pro'.includes(query);
+ $('#iphone18-featured').hidden=!conceptVisible;
+ for(const p of products){const visible=p.name.toLocaleLowerCase('uk').includes(query);
   document.querySelector(`[data-product-id="${p.id}"]`).hidden=!visible;
   document.querySelector(`[data-compare-model="${p.id}"]`).hidden=!visible;
   if(visible)count++;
  }
- $('#search-empty').classList.toggle('hidden',count!==0);
- $('#catalog-status').textContent=`Знайдено моделей: ${count} з ${products.length}.`;
+ $('#previous-models-heading').hidden=count===0;
+ $('#search-empty').classList.toggle('hidden',count!==0||conceptVisible);
+ $('#catalog-status').textContent=`Знайдено: ${conceptVisible?'концепт iPhone 18 Pro та ':''}${count} моделей попередніх поколінь.`;
+ const selected=products.find(p=>p.name.toLocaleLowerCase('uk')===query);
+ if(selected){$('#config-model').value=selected.id;updateConfigModel();}
 }
-fields.forEach(field=>field.addEventListener('input',()=>{fields.forEach(other=>other.value=field.value);filterCards();}));
-filter.addEventListener('change',()=>{filterCards();if(filter.value){$('#config-model').value=filter.value;updateConfigModel();}});
-$('#model-reset').addEventListener('click',()=>{filter.value='';fields.forEach(f=>f.value='');filterCards();filter.focus();});
+search.addEventListener('input',filterCards);
+search.addEventListener('change',filterCards);
+$('#model-reset').addEventListener('click',()=>{search.value='';filterCards();search.focus();});
 function options(select,values,label=String){select.replaceChildren(...values.map(value=>new Option(label(value),String(value))));select.disabled=!values.length;}
 function updateSummary(){
  const p=products.find(p=>p.id===$('#config-model').value);
@@ -52,5 +57,5 @@ updateConfigModel();filterCards();
 // One JSON source with a generated offline copy; never silently mix catalog versions.
 loadCatalog().then(fresh=>{
  if(JSON.stringify(fresh)!==JSON.stringify(products))throw new Error('Catalog version changed');
- $('#catalog-status').textContent=`Каталог із data.json: ${fresh.length} моделей. Характеристики перевірено 22.11.2026.`;
+ $('#catalog-status').textContent=`Каталог попередніх поколінь: ${fresh.length} моделей. iPhone 18 Pro представлено окремим концептом.`;
 }).catch(()=>{$('#catalog-status').textContent='Завантажено збережену версію каталогу. Оновлення з мережі недоступне.';});
