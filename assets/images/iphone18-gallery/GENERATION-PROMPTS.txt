@@ -1,0 +1,13 @@
+Дата: 2026-11-26
+Інструмент: вбудована генерація зображень image_gen.
+Зображення є авторськими ШІ-концептами iPhone 18 Pro, а не офіційними фотографіями Apple.
+
+Зображення 1
+Use case: product-mockup. Generate one landscape premium photorealistic 3D concept render for the iPhone Select educational website gallery. Subject exclusively an imagined iPhone 18 Pro, a recognizable Apple iPhone design with small Apple logo, deep burgundy metal and glass, three large rear camera lenses in a refined upper camera plateau. Three-quarter REAR view, complete single phone centered standing on a low black plinth, generous space around phone, dark wine and charcoal studio background, soft burgundy rim lighting, realistic material textures, crisp elegant product photography. Concept illustration, not claiming an official Apple product photo. No text, no typography, no watermark, no other devices, no collage. Landscape 3:2 composition.
+
+Зображення 2
+Use case: product-mockup. One landscape premium photorealistic 3D concept render of imagined iPhone 18 Pro for iPhone Select educational gallery. Exclusively the smartphone, close-up MACRO rear upper corner showing three large camera lenses, deep burgundy glass and precision metal frame, recognizable Apple iPhone form. Camera lenses realistic reflections, delicate crimson rim light, dark charcoal/wine studio background. Product is an illustrative concept, not official hardware documentation. No text, no watermarks, no people, no collage, no other products. Landscape 3:2.
+
+Зображення 3
+Use case: product-mockup. One landscape 3:2 premium photorealistic concept illustration for iPhone Select, exclusively an imagined iPhone 18 Pro smartphone. Front and back of same deep burgundy phone arranged gracefully on a black studio surface, rear has three large camera lenses and subtle Apple logo, front edge-to-edge dark screen with an elegant abstract burgundy light wave and small pill-shaped camera cutout, refined straight edges. Wide product composition, objects fully visible, soft wine rim lighting, charcoal background. Educational design concept, not official Apple photography. No written text, numbers, typography, watermarks, unrelated devices, collage or labels.
+

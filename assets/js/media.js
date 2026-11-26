@@ -31,7 +31,7 @@
       on:{init(s){region.dataset.ready='true';region.dataset.active=String(s.realIndex);},slideChange(s){region.dataset.active=String(s.realIndex);}}
     });
     root.querySelector('.media-controls').hidden=false;
-    status.textContent='6 матеріалів. Автогортання кожні 3,5 с; наведи курсор або зупини кнопкою.';
+    status.textContent='9 матеріалів. Автогортання кожні 3,5 с; наведи курсор або зупини кнопкою.';
     pause.addEventListener('click',()=>{manualPause=!manualPause;update();});
     root.addEventListener('mouseenter',()=>{reasons.add('hover');update();});
     root.addEventListener('mouseleave',()=>{reasons.delete('hover');update();});
@@ -40,7 +40,7 @@
     update();
   } else {
     region.dataset.ready='fallback';
-    status.textContent='Слайдер тимчасово недоступний. Усі 6 матеріалів показано сіткою.';
+    status.textContent='Слайдер тимчасово недоступний. Усі 9 матеріалів показано сіткою.';
   }
   if (window.Fancybox) {
     window.Fancybox.bind('[data-fancybox="coffee-gallery"]',{
