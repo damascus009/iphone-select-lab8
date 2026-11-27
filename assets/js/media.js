@@ -8,40 +8,70 @@
   const region = root.querySelector('.media-swiper');
   const pause = document.querySelector('#media-pause');
   let swiper, typed;
+  let timer = null;
   let manualPause = motion.matches;
   let typedPaused = motion.matches;
+  let inView = false;
+  let hoverOverride = false;
+  let disposed = false;
   const reasons = new Set();
+  const clearTimer = () => { clearTimeout(timer); timer = null; };
+  const stopped = () => disposed || manualPause || document.hidden || !inView ||
+    [...reasons].some(reason => reason !== 'hover' || !hoverOverride);
   const update = () => {
-    if (!swiper) return;
-    const stopped = manualPause || motion.matches || document.hidden || reasons.size > 0;
-    if (stopped) swiper.autoplay.stop(); else if (!swiper.autoplay.running) swiper.autoplay.start();
+    clearTimer();
+    if (!swiper || swiper.destroyed) return;
+    const blocked = stopped();
     pause.setAttribute('aria-pressed', String(manualPause));
     pause.textContent = manualPause ? 'Увімкнути автогортання' : 'Зупинити автогортання';
-    region.dataset.autoplay = stopped ? 'stopped' : 'running';
+    region.dataset.autoplay = blocked ? 'stopped' : 'running';
+    if (status) {
+      const message = manualPause ? 'Автогортання вимкнено. Натисни кнопку, щоб увімкнути.' :
+        reasons.has('hover') && !hoverOverride ? 'Автогортання на паузі, поки курсор над зображеннями.' :
+        blocked ? 'Автогортання на паузі; продовжиться, коли галерея буде видимою.' :
+        '9 матеріалів. Плавне автогортання кожні 3,5 с.';
+      status.textContent = message;
+    }
+    if (!blocked) {
+      // One clock only: never accumulate background ticks or catch up on return.
+      timer = setTimeout(() => {
+        timer = null;
+        if (stopped() || swiper.destroyed) return;
+        if (swiper.animating) { update(); return; }
+        swiper.slideNext();
+        update();
+      }, 3500);
+    }
   };
   if (typeof window.Swiper === 'function') {
     swiper = new window.Swiper(region, {
-      loop:true, slidesPerView:1, spaceBetween:20, speed:motion.matches?0:350,
-      autoplay:{delay:3500,disableOnInteraction:false,pauseOnMouseEnter:true},
+      loop:true, slidesPerView:1, spaceBetween:20, speed:motion.matches?0:600,
+      // The visibility-aware clock above owns automatic movement.
+      autoplay:false,
       breakpoints:{768:{slidesPerView:2},1024:{slidesPerView:3}},
       navigation:{prevEl:'#media-prev',nextEl:'#media-next'},
       pagination:{el:'.media-pagination',clickable:true},
       keyboard:{enabled:true,onlyInViewport:true},
       a11y:{prevSlideMessage:'Попередній слайд',nextSlideMessage:'Наступний слайд',paginationBulletMessage:'Перейти до слайда {{index}}',slideLabelMessage:'{{index}} з {{slidesLength}}'},
-      on:{init(s){region.dataset.ready='true';region.dataset.active=String(s.realIndex);},slideChange(s){region.dataset.active=String(s.realIndex);}}
+      on:{init(s){region.dataset.ready='true';region.dataset.active=String(s.realIndex);},slideChange(s){region.dataset.active=String(s.realIndex);update();}}
     });
     root.querySelector('.media-controls').hidden=false;
     status.textContent='9 матеріалів. Автогортання кожні 3,5 с; наведи курсор або зупини кнопкою.';
-    pause.addEventListener('click',()=>{manualPause=!manualPause;update();});
-    root.addEventListener('mouseenter',()=>{reasons.add('hover');update();});
-    root.addEventListener('mouseleave',()=>{reasons.delete('hover');update();});
-    root.addEventListener('focusin',()=>{reasons.add('focus');update();});
-    root.addEventListener('focusout',e=>{if(!root.contains(e.relatedTarget)){reasons.delete('focus');update();}});
+    pause.addEventListener('click',()=>{manualPause=!manualPause;hoverOverride=!manualPause && reasons.has('hover');update();});
+    region.addEventListener('mouseenter',()=>{reasons.add('hover');update();});
+    region.addEventListener('mouseleave',()=>{reasons.delete('hover');hoverOverride=false;update();});
+    region.addEventListener('focusin',e=>{if(e.target.matches(':focus-visible'))reasons.add('focus');update();});
+    region.addEventListener('focusout',e=>{if(!region.contains(e.relatedTarget)){reasons.delete('focus');update();}});
     update();
   } else {
     region.dataset.ready='fallback';
     status.textContent='Слайдер тимчасово недоступний. Усі 9 матеріалів показано сіткою.';
   }
+  const observer = new IntersectionObserver(entries => {
+    inView = entries[0].isIntersecting && entries[0].intersectionRatio >= 0.15;
+    update();
+  }, { threshold: 0.15 });
+  observer.observe(region);
   if (window.Fancybox) {
     window.Fancybox.bind('[data-fancybox="coffee-gallery"]',{
       Carousel:{transition:motion.matches?'none':'fade'},
@@ -59,7 +89,7 @@
     typedButton.addEventListener('click',()=>{typedPaused=!typedPaused;typedPaused?typed.stop():typed.start();typedButton.setAttribute('aria-pressed',String(typedPaused));typedButton.setAttribute('aria-label',typedPaused?'Продовжити анімацію тексту':'Зупинити анімацію тексту');});
   }
   document.addEventListener('visibilitychange',()=>{update();if(typed){if(document.hidden||typedPaused)typed.stop();else typed.start();}});
-  motion.addEventListener('change',()=>{if(swiper)swiper.params.speed=motion.matches?0:350;update();if(typed && motion.matches){typed.destroy();typed=null;document.querySelector('#media-typed').textContent='Порівнюй моделі. Розглядай деталі. Обирай свій iPhone.';typedButton.hidden=true;}});
-  addEventListener('pagehide',e=>{if(e.persisted){reasons.add('hidden');update();if(typed)typed.stop();}else{swiper?.destroy(true,true);typed?.destroy();window.Fancybox?.unbind('[data-fancybox="coffee-gallery"]');}});
+  motion.addEventListener('change',()=>{if(motion.matches)manualPause=true;if(swiper)swiper.params.speed=motion.matches?0:600;update();if(typed && motion.matches){typed.destroy();typed=null;document.querySelector('#media-typed').textContent='Порівнюй моделі. Розглядай деталі. Обирай свій iPhone.';typedButton.hidden=true;}});
+  addEventListener('pagehide',e=>{if(e.persisted){reasons.add('hidden');update();if(typed)typed.stop();}else{disposed=true;clearTimer();observer.disconnect();swiper?.destroy(true,true);typed?.destroy();window.Fancybox?.unbind('[data-fancybox="coffee-gallery"]');}});
   addEventListener('pageshow',()=>{reasons.delete('hidden');update();if(typed&&!typedPaused)typed.start();});
 })();
